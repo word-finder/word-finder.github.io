@@ -1,27 +1,20 @@
-// Main App Controller - Updated for Async Loading
+// Main App Controller
 
-document.addEventListener('DOMContentLoaded', async () => {
-  
-  // 1. Initialize engine from text file
-  // This must complete before Word of the Day or Searches can work
-  const isLoaded = await WordEngine.init('word.txt');
-
-  if (!isLoaded) {
-    console.error("Application failed to start: Dictionary not found.");
-    return;
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  // Init engine after wordlist loads
+  if (window.WORD_LIST) WordEngine.init();
 
   // ─── Word of the Day ───────────────────────────────────────────────────────
   function renderWOTD() {
     const el = document.getElementById('wotd-word');
+    const defEl = document.getElementById('wotd-def');
     const scoreEl = document.getElementById('wotd-score');
     if (!el) return;
-    
     const wotd = WordEngine.wordOfTheDay();
     if (wotd) {
       el.textContent = wotd.toUpperCase();
-      if (scoreEl) scoreEl.textContent = `Scrabble Score: ${WordEngine.scrabbleScore(wotd)}`;
-      
+      scoreEl.textContent = `Scrabble Score: ${WordEngine.scrabbleScore(wotd)}`;
+      // Animate letters
       el.innerHTML = wotd.toUpperCase().split('').map((ch, i) =>
         `<span class="wotd-letter" style="animation-delay:${i * 0.12}s">${ch}</span>`
       ).join('');
@@ -42,14 +35,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderResults(words) {
     if (!words.length) {
       finderResults.innerHTML = `<div class="no-results"><span class="no-results-icon">🔍</span><p>No words found. Try different letters!</p></div>`;
-      if (finderStats) finderStats.textContent = '';
+      finderStats.textContent = '';
       return;
     }
     const scored = WordEngine.withScores(words);
-    if (finderStats) {
-      finderStats.innerHTML = `<strong>${words.length.toLocaleString()}</strong> words found — sorted by Scrabble score`;
-    }
+    finderStats.innerHTML = `<strong>${words.length.toLocaleString()}</strong> words found — sorted by Scrabble score`;
 
+    // Group by length
     const byLen = {};
     scored.forEach(({word, score, length}) => {
       if (!byLen[length]) byLen[length] = [];
@@ -61,22 +53,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (activeFilter !== 'all') {
       const len = parseInt(activeFilter);
-      html += renderGroup(len, byLen[len] || []);
+      const group = byLen[len] || [];
+      html += renderGroup(len, group);
     } else {
-      lengths.forEach(len => html += renderGroup(len, byLen[len]));
+      lengths.forEach(len => {
+        html += renderGroup(len, byLen[len]);
+      });
     }
 
     finderResults.innerHTML = html;
 
+    // Add click to copy
     finderResults.querySelectorAll('.word-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         const word = chip.dataset.word;
         navigator.clipboard?.writeText(word);
         chip.classList.add('copied');
-        setTimeout(() => chip.classList.remove('copied'), 1200);
+        chip.title = 'Copied!';
+        setTimeout(() => { chip.classList.remove('copied'); chip.title = `Score: ${chip.dataset.score}`; }, 1200);
       });
     });
 
+    // Update filter buttons
     updateFilterCounts(byLen);
   }
 
@@ -127,48 +125,55 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       const letters = finderInput.value.trim();
       if (!letters) return;
-      
       finderLoading.classList.add('visible');
       finderResults.innerHTML = '';
-      if (finderStats) finderStats.textContent = '';
+      finderStats.textContent = '';
 
       setTimeout(() => {
         const mustInclude = document.getElementById('must-include')?.value.trim() || '';
         const minLen = parseInt(document.getElementById('min-length')?.value || '2');
         const maxLen = parseInt(document.getElementById('max-length')?.value || letters.length);
-        
         currentResults = WordEngine.findFromLetters(letters, { minLen, maxLen, mustInclude });
         finderLoading.classList.remove('visible');
         renderResults(currentResults);
         document.getElementById('finder-results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
+      }, 80);
     });
   }
 
   // ─── Unscramble Tool ───────────────────────────────────────────────────────
   const unscrambleForm = document.getElementById('unscramble-form');
+  const unscrambleInput = document.getElementById('unscramble-input');
   const unscrambleResults = document.getElementById('unscramble-results');
 
   if (unscrambleForm) {
     unscrambleForm.addEventListener('submit', e => {
       e.preventDefault();
-      const letters = document.getElementById('unscramble-input')?.value.trim();
+      const letters = unscrambleInput.value.trim();
       if (!letters) return;
-      
       const results = WordEngine.findFromLetters(letters);
       if (!results.length) {
-        unscrambleResults.innerHTML = `<div class="no-results"><p>No words found.</p></div>`;
+        unscrambleResults.innerHTML = `<div class="no-results"><span class="no-results-icon">🔤</span><p>No unscrambled words found.</p></div>`;
         return;
       }
       const scored = WordEngine.withScores(results);
       unscrambleResults.innerHTML = `
-        <div class="unscramble-header"><strong>${results.length}</strong> words from <em>${letters.toUpperCase()}</em></div>
+        <div class="unscramble-header">
+          <strong>${results.length}</strong> words from <em>${letters.toUpperCase()}</em>
+        </div>
         <div class="word-chips">
           ${scored.slice(0, 150).map(({word, score}) =>
-            `<span class="word-chip" data-word="${word}" data-score="${score}">${word}<span class="chip-score">${score}</span></span>`
+            `<span class="word-chip" data-word="${word}" data-score="${score}" title="Score: ${score}">${word}<span class="chip-score">${score}</span></span>`
           ).join('')}
         </div>
       `;
+      unscrambleResults.querySelectorAll('.word-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          navigator.clipboard?.writeText(chip.dataset.word);
+          chip.classList.add('copied');
+          setTimeout(() => chip.classList.remove('copied'), 1200);
+        });
+      });
     });
   }
 
@@ -190,19 +195,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       const scored = WordEngine.withScores(results);
       seResults.innerHTML = `
-        <div class="unscramble-header"><strong>${results.length}</strong> words ${mode === 'starts' ? 'starting' : 'ending'} with <em>${text.toUpperCase()}</em></div>
+        <div class="unscramble-header">
+          <strong>${results.length}</strong> words ${mode === 'starts' ? 'starting with' : 'ending with'} <em>${text.toUpperCase()}</em>
+        </div>
         <div class="word-chips">
           ${scored.slice(0, 200).map(({word, score}) =>
-            `<span class="word-chip" data-word="${word}">${word}<span class="chip-score">${score}</span></span>`
+            `<span class="word-chip" data-word="${word}" data-score="${score}" title="Score: ${score}">${word}<span class="chip-score">${score}</span></span>`
           ).join('')}
         </div>
       `;
+      seResults.querySelectorAll('.word-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          navigator.clipboard?.writeText(chip.dataset.word);
+          chip.classList.add('copied');
+          setTimeout(() => chip.classList.remove('copied'), 1200);
+        });
+      });
     });
   }
 
-  // ─── Pattern & Length & Validator ──────────────────────────────────────────
-  // (Remaining utility logic follows the same pattern as your previous code)
-  
+  // ─── Word by Length ────────────────────────────────────────────────────────
   const lengthBtns = document.querySelectorAll('.length-selector-btn');
   const lengthResults = document.getElementById('length-results');
 
@@ -212,54 +224,88 @@ document.addEventListener('DOMContentLoaded', async () => {
       btn.classList.add('active');
       const len = parseInt(btn.dataset.length);
       const words = WordEngine.byLength(len);
+      if (!words.length) {
+        lengthResults.innerHTML = `<div class="no-results"><p>No ${len}-letter words found.</p></div>`;
+        return;
+      }
       const scored = WordEngine.withScores(words.slice(0, 300));
       lengthResults.innerHTML = `
         <div class="unscramble-header"><strong>${words.length.toLocaleString()}</strong> words with ${len} letters</div>
-        <div class="word-chips">${scored.map(s => `<span class="word-chip">${s.word}<span class="chip-score">${s.score}</span></span>`).join('')}</div>
+        <div class="word-chips">
+          ${scored.slice(0,200).map(({word, score}) =>
+            `<span class="word-chip" data-word="${word}" data-score="${score}" title="Score: ${score}">${word}<span class="chip-score">${score}</span></span>`
+          ).join('')}
+        </div>
       `;
+      lengthResults.querySelectorAll('.word-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          navigator.clipboard?.writeText(chip.dataset.word);
+          chip.classList.add('copied');
+          setTimeout(() => chip.classList.remove('copied'), 1200);
+        });
+      });
     });
   });
 
+  // ─── Pattern Finder ────────────────────────────────────────────────────────
   const patternForm = document.getElementById('pattern-form');
   const patternResults = document.getElementById('pattern-results');
+
   if (patternForm) {
     patternForm.addEventListener('submit', e => {
       e.preventDefault();
       const pattern = document.getElementById('pattern-input')?.value.trim();
       if (!pattern) return;
       const results = WordEngine.matchPattern(pattern);
-      patternResults.innerHTML = `<div class="word-chips">${results.slice(0, 100).map(w => `<span class="word-chip">${w}</span>`).join('')}</div>`;
+      if (!results.length) {
+        patternResults.innerHTML = `<div class="no-results"><p>No words match this pattern.</p></div>`;
+        return;
+      }
+      patternResults.innerHTML = `
+        <div class="unscramble-header"><strong>${results.length}</strong> words match <em>${pattern.toUpperCase()}</em></div>
+        <div class="word-chips">
+          ${results.slice(0,150).map(w =>
+            `<span class="word-chip" data-word="${w}" title="${w}">${w}<span class="chip-score">${WordEngine.scrabbleScore(w)}</span></span>`
+          ).join('')}
+        </div>
+      `;
     });
   }
 
+  // ─── Word Validator ────────────────────────────────────────────────────────
   const validatorInput = document.getElementById('validator-input');
   const validatorResult = document.getElementById('validator-result');
+
   if (validatorInput) {
+    let validatorTimeout;
     validatorInput.addEventListener('input', () => {
+      clearTimeout(validatorTimeout);
       const word = validatorInput.value.trim();
       if (!word) { validatorResult.innerHTML = ''; return; }
-      const valid = WordEngine.isValid(word);
-      validatorResult.innerHTML = valid 
-        ? `<span class="valid-yes">✓ Valid!</span>` 
-        : `<span class="valid-no">✗ Invalid</span>`;
+      validatorTimeout = setTimeout(() => {
+        const valid = WordEngine.isValid(word);
+        const score = WordEngine.scrabbleScore(word);
+        validatorResult.innerHTML = valid
+          ? `<span class="valid-yes">✓ <strong>${word.toUpperCase()}</strong> is a valid word! &nbsp; Scrabble score: <strong>${score}</strong></span>`
+          : `<span class="valid-no">✗ <strong>${word.toUpperCase()}</strong> is not in our dictionary</span>`;
+      }, 300);
     });
   }
 
-  // Hero shortcut
+  // ─── Hero search shortcut ──────────────────────────────────────────────────
   const heroForm = document.getElementById('hero-form');
   if (heroForm) {
     heroForm.addEventListener('submit', e => {
       e.preventDefault();
       const val = document.getElementById('hero-input')?.value.trim();
-      if (val && finderInput) {
-        finderInput.value = val;
-        document.getElementById('finder-tool')?.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => finderForm?.dispatchEvent(new Event('submit')), 400);
-      }
+      if (!val) return;
+      if (finderInput) finderInput.value = val;
+      document.getElementById('finder-tool')?.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => finderForm?.dispatchEvent(new Event('submit')), 400);
     });
   }
 
-  // Intersection Observer for animations
+  // ─── Animate sections on scroll ───────────────────────────────────────────
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
