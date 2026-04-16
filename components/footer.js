@@ -26,12 +26,12 @@ function renderFooter() {
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Games</h4>
+          <h4>Pages</h4>
           <ul>
-            <li><a href="#finder-tool">Scrabble Helper</a></li>
-            <li><a href="#finder-tool">Words With Friends</a></li>
-            <li><a href="#finder-tool">Wordle Solver</a></li>
-            <li><a href="#finder-tool">Crossword Helper</a></li>
+            <li><a href="about">About</a></li>
+            <li><a href="contact">Contact</a></li>
+            <li><a href="privacy-policy">Privacy Policy</a></li>
+            <li><a href="terms-of-use">Terms of Use</a></li>
           </ul>
         </div>
         <div class="footer-col">
