@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – WordFinder</title>
+  <meta name="description" content="Have questions or feedback? Contact the WordFinder team today.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+</head>
+<body>
+
+<header id="site-header" role="banner"></header>
+
+<section class="section">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Get in Touch</span>
+      <h1>Contact Us</h1>
+      <p style="max-width:600px;margin:12px auto 0">Have a suggestion for a new feature? Found a missing word? We'd love to hear from you.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="max-width: 800px; margin-left: auto; margin-right: auto;">
+      <div class="contact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+        
+        <div class="contact-info">
+          <h3>Direct Contact</h3>
+          <p>For support, business inquiries, or technical feedback, you can reach out directly via email:</p>
+          <div style="margin-top: 20px;">
+            <a href="mailto:nolushac@gmail.com" class="btn-primary" style="text-decoration: none; display: inline-block;">
+              Email: nolushac@gmail.com
+            </a>
+          </div>
+          
+          <h3 style="margin-top: 40px;">Social & Code</h3>
+          <p>You can also follow our development progress or report issues through our official GitHub repository.</p>
+          <p><strong>Lead Developer:</strong> Waqas Bukhari</p>
+        </div>
+
+        <div class="contact-form-area">
+          <form id="contact-page-form" action="#" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+            <div class="option-field">
+              <label for="contact-name">Name</label>
+              <input type="text" id="contact-name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="option-field">
+              <label for="contact-email">Email</label>
+              <input type="email" id="contact-email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="option-field">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" name="message" rows="5" placeholder="How can we help?" style="width: 100%; border: 2px solid #000; padding: 10px; font-family: inherit;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Send Message</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer" role="contentinfo"></footer>
+
+<script src="components/header.js"></script>
+<script src="components/footer.js"></script>
+</body>
+</html>
