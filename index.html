@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Finder – Find Words for Scrabble, Wordle, Crosswords & Word Games</title>
+  <meta name="description" content="WordFinder is a free, powerful word finder tool and game solver. Find words from letters, unscramble words, solve Scrabble, Wordle, Words With Friends, and crossword puzzles instantly.">
+  <meta name="keywords" content="word finder, word finder from letters, unscramble words, scrabble word finder, wordle solver, words with friends cheat, crossword solver, anagram solver, word unscrambler, words ending in, words starting with">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://word-finder.github.io/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Word Finder – Find Words for Any Word Game">
+  <meta property="og:description" content="Free word finder, unscrambler and game solver for Scrabble, Wordle, Words With Friends, and crossword puzzles.">
+  <meta property="og:url" content="https://word-finder.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://word-finder.github.io/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Word Finder – Free Word Game Solver">
+  <meta name="twitter:description" content="Find words from letters, unscramble, solve Scrabble and Wordle with our powerful word finder tool.">
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://word-finder.github.io/#website",
+        "url": "https://word-finder.github.io/",
+        "name": "WordFinder",
+        "description": "Free word finder and word game solver for Scrabble, Wordle, Words With Friends, and more.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://word-finder.github.io/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://word-finder.github.io/#app",
+        "name": "WordFinder",
+        "url": "https://word-finder.github.io/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "A powerful word finder web application for word games, puzzles and vocabulary building.",
+        "featureList": [
+          "Word Finder from Letters",
+          "Word Unscrambler",
+          "Scrabble Word Finder",
+          "Wordle Solver",
+          "Words by Length",
+          "Pattern Matching",
+          "Word Validator"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a word finder?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A word finder is an online tool that helps you find words from a given set of letters. It's commonly used as a helper for word games like Scrabble, Words With Friends, Wordle, and crossword puzzles."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I use the word finder?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Simply type the letters you have into the search box and click 'Find Words'. The tool will instantly show you all valid words that can be formed from those letters, sorted by Scrabble score."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use wildcard letters?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Use ? or * as wildcard characters (blank tiles) in your letter set. These represent any letter, just like blank tiles in Scrabble."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is WordFinder free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, WordFinder is completely free to use. No registration, no subscription, no ads — just powerful word tools."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════════ -->
+<header id="site-header" role="banner"></header>
+
+<!-- ═══════════════ HERO ══════════════════════ -->
+<section class="hero" aria-label="Hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <p class="hero-kicker">Free Word Game Solver &amp; Helper</p>
+        <h1>Find the <em>Perfect Word</em> Every Time</h1>
+        <p class="hero-desc">WordFinder is your ultimate word game companion. Enter your letters and instantly discover every possible word — from quick two-letter plays to high-scoring Scrabble bingos.</p>
+
+        <div class="hero-search-box">
+          <form id="hero-form" autocomplete="off">
+            <label for="hero-input">Enter your letters (use ? for blank tiles)</label>
+            <div class="hero-input-row">
+              <input
+                type="text"
+                id="hero-input"
+                placeholder="e.g. AEIOURST"
+                maxlength="20"
+                aria-label="Enter letters to find words"
+                spellcheck="false"
+                autocomplete="off"
+              >
+              <button type="submit" class="btn-primary">Find Words</button>
+            </div>
+          </form>
+          <div class="hero-tags">
+            <span class="hero-tag">🎯 Scrabble</span>
+            <span class="hero-tag">🟩 Wordle</span>
+            <span class="hero-tag">🤝 Words With Friends</span>
+            <span class="hero-tag">✏️ Crosswords</span>
+            <span class="hero-tag">🔤 Unscramble</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="letter-tiles">
+          <div class="tile tile-accent" style="animation-delay:.1s">S</div>
+          <div class="tile tile-amber" style="animation-delay:.2s">C</div>
+          <div class="tile tile-green" style="animation-delay:.3s">R</div>
+          <div class="tile tile-blue" style="animation-delay:.4s">A</div>
+          <div class="tile tile-cream" style="animation-delay:.5s">B</div>
+          <div class="tile tile-accent" style="animation-delay:.6s">B</div>
+          <div class="tile tile-amber" style="animation-delay:.7s">L</div>
+          <div class="tile tile-green" style="animation-delay:.8s">E</div>
+        </div>
+        <div class="hero-stat-grid">
+          <div class="hero-stat">
+            <div class="hero-stat-num">80K+</div>
+            <div class="hero-stat-label">Words in Dictionary</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">6</div>
+            <div class="hero-stat-label">Powerful Tools</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">Free Forever</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">4+</div>
+            <div class="hero-stat-label">Games Supported</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WORD OF THE DAY ══════════════ -->
+<section class="wotd-section" id="word-of-the-day" aria-label="Word of the Day">
+  <div class="container">
+    <div class="wotd-inner">
+      <div class="wotd-left">
+        <p class="wotd-kicker">✦ Word of the Day</p>
+        <div id="wotd-word" class="wotd-word-display" aria-live="polite">Loading...</div>
+        <p id="wotd-def" class="wotd-score"></p>
+        <p id="wotd-score" class="wotd-score" style="margin-top:4px"></p>
+      </div>
+      <a href="#finder-tool" class="wotd-try-btn">Try This Word →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MAIN FINDER TOOL ══════════════ -->
+<section class="section" id="finder-tool" aria-label="Word Finder Tool">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Core Tool</span>
+      <h2>Word Finder — Find Words From Letters</h2>
+      <p style="max-width:600px;margin:12px auto 0">Enter any combination of letters and discover every valid word. Use <strong>?</strong> or <strong>*</strong> for blank/wildcard tiles.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <form id="finder-form" autocomplete="off">
+        <div class="input-group">
+          <input
+            type="text"
+            id="finder-input"
+            placeholder="Enter letters (e.g. RESTING or QUEST??)"
+            maxlength="20"
+            aria-label="Letters to find words from"
+            spellcheck="false"
+            autocomplete="off"
+            style="text-transform:uppercase;letter-spacing:.08em;font-size:1.05rem"
+          >
+          <button type="submit" class="btn-primary">Find Words</button>
+        </div>
+        <p class="hint-text">💡 Use <strong>?</strong> or <strong>*</strong> for blank tiles &nbsp;·&nbsp; Click any word to copy it</p>
+
+        <div class="advanced-options">
+          <div class="option-field">
+            <label for="must-include">Must Contain Letters</label>
+            <input type="text" id="must-include" placeholder="e.g. qu" maxlength="8" spellcheck="false">
+          </div>
+          <div class="option-field">
+            <label for="min-length">Min Word Length</label>
+            <input type="number" id="min-length" value="2" min="2" max="15">
+          </div>
+          <div class="option-field">
+            <label for="max-length">Max Word Length</label>
+            <input type="number" id="max-length" value="15" min="2" max="15">
+          </div>
+        </div>
+      </form>
+
+      <div class="filter-bar" role="group" aria-label="Filter results by word length">
+        <button class="filter-btn active" data-filter="all">All Lengths <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="2">2 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="3">3 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="4">4 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="5">5 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="6">6 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="7">7 <span class="filter-count">0</span></button>
+        <button class="filter-btn" data-filter="8">8+ <span class="filter-count">0</span></button>
+      </div>
+
+      <div id="finder-loading" class="loading-indicator" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        Searching dictionary…
+      </div>
+      <div id="finder-stats" class="finder-stats" style="display:none" aria-live="polite"></div>
+      <div id="finder-results-section">
+        <div id="finder-results" role="region" aria-label="Word finder results" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MORE TOOLS TABS ═══════════════ -->
+<section class="section section-alt" id="more-tools" aria-label="Additional Word Tools">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">More Tools</span>
+      <h2>Powerful Word Tools for Every Game</h2>
+      <p style="max-width:560px;margin:12px auto 0">From unscrambling jumbled letters to pattern matching, we have every tool you need to dominate any word game.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="unscramble" id="tab-unscramble">Unscramble</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="starts-ends" id="tab-se">Starts / Ends With</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="pattern" id="tab-pattern">Pattern Match</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="validator" id="tab-validator">Word Validator</button>
+      </div>
+
+      <!-- Unscramble -->
+      <div class="tab-panel active" id="panel-unscramble" role="tabpanel" aria-labelledby="tab-unscramble">
+        <div class="tool-title" id="unscramble">Word Unscrambler</div>
+        <p class="tool-desc">Jumbled letters got you stuck? Unscramble any set of letters to find all possible words, ordered by Scrabble score.</p>
+        <form id="unscramble-form" autocomplete="off">
+          <div class="input-group">
+            <input type="text" id="unscramble-input" placeholder="Enter scrambled letters (e.g. TSINGE)" maxlength="15" aria-label="Scrambled letters to unscramble" spellcheck="false" autocomplete="off" style="text-transform:uppercase;letter-spacing:.08em">
+            <button type="submit" class="btn-primary">Unscramble</button>
+          </div>
+        </form>
+        <div id="unscramble-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Starts/Ends -->
+      <div class="tab-panel" id="panel-starts-ends" role="tabpanel" aria-labelledby="tab-se">
+        <div class="tool-title" id="starts-ends">Words Starting or Ending With</div>
+        <p class="tool-desc">Find all words that begin or end with your chosen letters — perfect for crosswords and Scrabble hooks.</p>
+        <form id="se-form" autocomplete="off">
+          <div class="mode-toggle">
+            <label><input type="radio" name="se-mode" value="starts" checked><span>Starts With</span></label>
+            <label><input type="radio" name="se-mode" value="ends"><span>Ends With</span></label>
+          </div>
+          <div class="input-group">
+            <input type="text" id="se-input" placeholder="Enter prefix or suffix (e.g. pre)" maxlength="10" aria-label="Letters to search" spellcheck="false" autocomplete="off">
+            <button type="submit" class="btn-primary">Search</button>
+          </div>
+        </form>
+        <div id="se-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Pattern -->
+      <div class="tab-panel" id="panel-pattern" role="tabpanel" aria-labelledby="tab-pattern">
+        <div class="tool-title">Pattern Word Finder</div>
+        <p class="tool-desc">Know some letters but not all? Use <strong>?</strong> or <strong>_</strong> as wildcards. For example, <strong>c_t</strong> matches <em>cat</em>, <em>cut</em>, <em>cot</em>.</p>
+        <form id="pattern-form" autocomplete="off">
+          <div class="input-group">
+            <input type="text" id="pattern-input" placeholder="Enter pattern (e.g. _ea_s or ?ight)" maxlength="15" aria-label="Word pattern with wildcards" spellcheck="false" autocomplete="off">
+            <button type="submit" class="btn-primary">Match Pattern</button>
+          </div>
+        </form>
+        <div id="pattern-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Validator -->
+      <div class="tab-panel" id="panel-validator" role="tabpanel" aria-labelledby="tab-validator">
+        <div class="tool-title">Word Validator</div>
+        <p class="tool-desc">Not sure if a word is valid? Check instantly whether it's in our dictionary and see its Scrabble score.</p>
+        <div class="validator-wrap">
+          <input type="text" id="validator-input" placeholder="Type a word to check..." maxlength="25" aria-label="Word to validate" spellcheck="false" autocomplete="off">
+          <div id="validator-result" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WORDS BY LENGTH ═══════════════ -->
+<section class="section" id="word-length" aria-label="Words by Length">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Browse</span>
+      <h2>Words by Letter Count</h2>
+      <p style="max-width:560px;margin:12px auto 0">Browse our dictionary by word length — a great way to find short hooks for Scrabble or long words for maximum points.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <p class="tool-desc">Select a word length to see all available words:</p>
+      <div class="length-selector" role="group" aria-label="Select word length">
+        <button class="length-selector-btn" data-length="2">2</button>
+        <button class="length-selector-btn" data-length="3">3</button>
+        <button class="length-selector-btn" data-length="4">4</button>
+        <button class="length-selector-btn" data-length="5">5</button>
+        <button class="length-selector-btn" data-length="6">6</button>
+        <button class="length-selector-btn" data-length="7">7</button>
+        <button class="length-selector-btn" data-length="8">8</button>
+        <button class="length-selector-btn" data-length="9">9</button>
+        <button class="length-selector-btn" data-length="10">10</button>
+        <button class="length-selector-btn" data-length="11">11</button>
+        <button class="length-selector-btn" data-length="12">12</button>
+      </div>
+      <div id="length-results" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GAMES SUPPORTED ═══════════════ -->
+<section class="section section-alt" id="games-supported" aria-label="Supported Word Games">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Game Support</span>
+      <h2>Works With Every Word Game</h2>
+      <p style="max-width:580px;margin:12px auto 0">WordFinder is a universal word game helper. Whether you're playing on your phone, a board, or with a newspaper, we've got you covered.</p>
+    </div>
+
+    <div class="games-grid">
+      <div class="game-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="game-icon">🎯</div>
+        <h4>Scrabble</h4>
+        <p>Find highest-scoring plays from your rack. Includes Scrabble point values for every word.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="game-icon">🟩</div>
+        <h4>Wordle</h4>
+        <p>Stuck on today's Wordle? Use pattern matching to find 5-letter words with specific letters.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="game-icon">🤝</div>
+        <h4>Words With Friends</h4>
+        <p>Dominate your opponents with high-value words using your full rack of letters.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="game-icon">✏️</div>
+        <h4>Crossword Puzzles</h4>
+        <p>Fill in missing letters using our pattern finder to solve any crossword clue quickly.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="game-icon">🔤</div>
+        <h4>Word Jumbles</h4>
+        <p>Instantly unscramble any jumbled word from newspapers and puzzle books.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="game-icon">🧩</div>
+        <h4>Anagram Games</h4>
+        <p>Find all anagrams and rearrangements of any word or phrase instantly.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.35s">
+        <div class="game-icon">📱</div>
+        <h4>Word Hunt</h4>
+        <p>Find all possible words hidden within a grid of letters for mobile puzzle games.</p>
+      </div>
+      <div class="game-card animate-on-scroll" style="transition-delay:.4s">
+        <div class="game-icon">📚</div>
+        <h4>Educational Games</h4>
+        <p>A fantastic vocabulary-building tool for students, teachers, and language learners.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ══════════════════ -->
+<section class="section" id="how-it-works" aria-label="How Word Finder Works">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">How It Works</span>
+      <h2>Find Words in Three Simple Steps</h2>
+      <p style="max-width:520px;margin:12px auto 0">Our word finding algorithm processes hundreds of thousands of dictionary entries in milliseconds to deliver instant results.</p>
+    </div>
+
+    <div class="how-steps">
+      <div class="how-step animate-on-scroll" style="transition-delay:.05s">
+        <div class="step-num">1</div>
+        <h4>Enter Your Letters</h4>
+        <p>Type the letters you have available into the search box. Include <strong>?</strong> for blank tiles.</p>
+      </div>
+      <div class="how-step animate-on-scroll" style="transition-delay:.12s">
+        <div class="step-num">2</div>
+        <h4>Set Filters (Optional)</h4>
+        <p>Narrow results by word length, required letters, or use advanced options to refine your search.</p>
+      </div>
+      <div class="how-step animate-on-scroll" style="transition-delay:.19s">
+        <div class="step-num">3</div>
+        <h4>Browse &amp; Filter Results</h4>
+        <p>Instantly see all valid words sorted by Scrabble score. Click any word to copy it.</p>
+      </div>
+      <div class="how-step animate-on-scroll" style="transition-delay:.26s">
+        <div class="step-num">4</div>
+        <h4>Play Your Best Word!</h4>
+        <p>Choose the highest-scoring, best-fitting word and crush your competition.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURES ══════════════════════ -->
+<section class="section section-alt" id="features" aria-label="Features">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Why WordFinder</span>
+      <h2>Everything You Need to Win Word Games</h2>
+      <p style="max-width:540px;margin:12px auto 0">Built for word game enthusiasts, students, and puzzle solvers alike — packed with features you won't find elsewhere.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="feature-icon icon-accent">⚡</div>
+        <h3>Lightning Fast</h3>
+        <p>Our client-side dictionary processes searches instantly — no server round-trips, no waiting. Results appear in milliseconds.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="feature-icon icon-green">📖</div>
+        <h3>Massive Dictionary</h3>
+        <p>Over 80,000 valid English words drawn from a comprehensive dictionary covering standard Scrabble and game dictionaries.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="feature-icon icon-blue">🃏</div>
+        <h3>Wildcard Support</h3>
+        <p>Use <strong>?</strong> or <strong>*</strong> characters for blank tiles, just like in Scrabble. The engine treats them as any letter.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="feature-icon icon-amber">🏆</div>
+        <h3>Scrabble Scoring</h3>
+        <p>Every word is instantly scored using standard Scrabble letter values so you always know which play earns the most points.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="feature-icon icon-accent">🔍</div>
+        <h3>Pattern Matching</h3>
+        <p>Fill in the blanks with our pattern finder. Enter known letters and wildcards to solve crossword clues or Wordle puzzles.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="feature-icon icon-green">📱</div>
+        <h3>Mobile Friendly</h3>
+        <p>Fully responsive design works perfectly on every device — use it on your phone while playing a word game anywhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TIPS & TRICKS ══════════════════ -->
+<section class="section" id="word-tips" aria-label="Word Game Tips and Tricks">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Expert Knowledge</span>
+      <h2>Tips &amp; Tricks to Master Word Games</h2>
+      <p style="max-width:560px;margin:12px auto 0">Level up your game with these proven strategies used by competitive word game players worldwide.</p>
+    </div>
+
+    <div class="tips-grid">
+      <div class="tip-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="tip-num">1</div>
+        <div>
+          <h4>Learn High-Value Short Words</h4>
+          <p>Two-letter and three-letter words like <strong>QI</strong>, <strong>ZA</strong>, <strong>OX</strong>, and <strong>JO</strong> are essential Scrabble weapons. Memorize the full list of valid 2-letter words — there are 101 of them in the official dictionary.</p>
+        </div>
+      </div>
+      <div class="tip-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="tip-num">2</div>
+        <div>
+          <h4>Balance Vowels and Consonants</h4>
+          <p>An ideal Scrabble rack has 2–3 vowels. Too many vowels (like AAEIOU) limits your options dramatically. Exchange tiles early if your rack is unbalanced rather than making a weak play.</p>
+        </div>
+      </div>
+      <div class="tip-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="tip-num">3</div>
+        <div>
+          <h4>Use Prefixes and Suffixes</h4>
+          <p>Adding <strong>S</strong>, <strong>ED</strong>, <strong>ING</strong>, <strong>ER</strong>, <strong>EST</strong>, <strong>UN-</strong>, <strong>RE-</strong>, or <strong>PRE-</strong> to existing board words (hooking) is one of the most powerful strategies in Scrabble.</p>
+        </div>
+      </div>
+      <div class="tip-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="tip-num">4</div>
+        <div>
+          <h4>Target Premium Squares</h4>
+          <p>Always aim to place high-value letters (Q, Z, X, J) on Double Letter or Triple Letter score squares. A <strong>QI</strong> on a triple letter score earns 30 points from just two letters!</p>
+        </div>
+      </div>
+      <div class="tip-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="tip-num">5</div>
+        <div>
+          <h4>Wordle Strategy: Start Broad</h4>
+          <p>Begin Wordle with words that cover common letters: <strong>CRANE</strong>, <strong>SLATE</strong>, or <strong>RAISE</strong> are statistically excellent openers. Eliminate as many letters as possible in your first two guesses.</p>
+        </div>
+      </div>
+      <div class="tip-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="tip-num">6</div>
+        <div>
+          <h4>Keep High-Flexibility Tiles</h4>
+          <p>The letters S, E, R, and blank tiles are the most flexible in any word game. Don't waste them on low-scoring plays — save them for setting up bigger, higher-scoring moves.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ EDUCATIONAL TEXT ══════════════ -->
+<section class="section section-alt" aria-label="About Word Finder">
+  <div class="container">
+    <div class="content-section animate-on-scroll">
+      <span class="section-label">Learn More</span>
+      <h2>What Is a Word Finder and How Does It Help You?</h2>
+      <p>A <strong>word finder</strong> is a web-based application that acts as a helper or solver for word-based games and puzzles. Whether you're playing Scrabble on a Friday night, competing in Words With Friends on your commute, or agonizing over today's Wordle, a word finder tool gives you instant access to every valid word possible from your available letters.</p>
+      <p>Our word finder works by taking the letters you input and cross-referencing them against a comprehensive English dictionary. Within milliseconds, the algorithm identifies every valid word that can be formed using some or all of your letters — then sorts the results by Scrabble score so the highest-value plays appear first.</p>
+      <h3 style="margin:28px 0 12px">Who Uses a Word Finder?</h3>
+      <p>Word finders are used by a diverse range of people:</p>
+      <ul>
+        <li><strong>Casual players</strong> who want help when they're stuck and can't see a word in their rack</li>
+        <li><strong>Competitive Scrabble players</strong> who use it to study and improve their vocabulary</li>
+        <li><strong>Students and teachers</strong> using it as a vocabulary-building educational tool</li>
+        <li><strong>Puzzle enthusiasts</strong> solving crosswords, word jumbles, and anagram challenges</li>
+        <li><strong>Non-native English speakers</strong> learning the language through word games</li>
+        <li><strong>Writers and content creators</strong> looking for specific word structures or rhymes</li>
+      </ul>
+      <h3 style="margin:28px 0 12px">Word Finder vs Word Unscrambler: What's the Difference?</h3>
+      <p>A <strong>word finder</strong> finds all words that can be made from a subset of your letters — you don't need to use every letter. A <strong>word unscrambler</strong> finds words using all or most of your scrambled letters. Our tool does both: the main finder uses any combination of your letters, while the dedicated Unscramble tool focuses on using as many of your letters as possible.</p>
+      <p>Both are invaluable for different scenarios. Use the word finder when you have a full Scrabble rack and want maximum options. Use the unscrambler when you're given a specific set of scrambled letters and need to identify the intended word.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════════════════ -->
+<section class="section" id="faq" aria-label="Frequently Asked Questions">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">FAQ</span>
+      <h2>Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-list animate-on-scroll" style="transition-delay:.1s">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          What is a word finder?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>A word finder is an online tool that helps you discover all possible words from a given set of letters. It's commonly used as a helper or cheat tool for word games such as Scrabble, Words With Friends, Wordle, and crossword puzzles. Simply enter your available letters and the tool instantly searches its dictionary to return every valid word you can form.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How do I use wildcards / blank tiles?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Type <strong>?</strong> or <strong>*</strong> in your letter input to represent a blank tile. These wildcards can stand in for any letter of the alphabet, just like blank tiles in Scrabble. For example, entering <strong>QUEST?</strong> will find words that use those five letters plus any additional letter represented by the wildcard.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How many words are in the dictionary?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Our word finder uses a curated dictionary of over 80,000 English words, drawn from a comprehensive source covering standard Scrabble-valid words and common English vocabulary. The dictionary includes words from 2 to 12 letters in length and is regularly checked for accuracy.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Is WordFinder free to use?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Yes, WordFinder is completely free to use with no registration required. You can use all tools — the word finder, unscrambler, pattern matcher, word validator, and more — without creating an account or paying anything.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Can I use this as a Scrabble cheat?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>WordFinder is intended as an educational and vocabulary-building tool. Many people use it to learn new words, improve their game strategy, and expand their vocabulary. Whether you use it during a casual game or to study word patterns for competitive play is entirely up to you and your fellow players!</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Does it work on mobile devices?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Absolutely. WordFinder is fully responsive and works seamlessly on smartphones, tablets, and desktop computers. The interface adapts to any screen size so you can use it conveniently while playing word games on your phone.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How does the Scrabble scoring work?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Each word is scored using standard Scrabble letter values: common letters like E, A, I, O, N, R, S, T, L, U are worth 1 point each, while rare letters like Q and Z are worth 10 points each. The score shown next to each word is the base tile score — your actual game score may be higher depending on premium squares on the board.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ════════════════════════ -->
+<footer id="site-footer" role="contentinfo"></footer>
+
+<!-- ─── Scripts ─────────────────────────────── -->
+<script src="js/wordlist.js"></script>
+<script src="js/engine.js"></script>
+<script src="components/header.js"></script>
+<script src="components/footer.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tabId)?.classList.add('active');
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const expanded = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      if (!expanded) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // Show finder stats div when content arrives
+  const observer = new MutationObserver(() => {
+    const stats = document.getElementById('finder-stats');
+    if (stats) stats.style.display = stats.textContent ? 'block' : 'none';
+  });
+  const statsEl = document.getElementById('finder-stats');
+  if (statsEl) observer.observe(statsEl, { childList: true, subtree: true });
+</script>
+</body>
+</html>
