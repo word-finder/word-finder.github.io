@@ -1,10 +1,8 @@
+// Main App Controller
+
 document.addEventListener('DOMContentLoaded', () => {
-  WordEngine.init().then(() => {
-    // All your existing initialization code
-    renderWOTD();
-    // ... rest of your app code
-  });
-});
+  // Init engine after wordlist loads
+  if (window.WORD_LIST) WordEngine.init();
 
   // ─── Word of the Day ───────────────────────────────────────────────────────
   function renderWOTD() {
