@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NWWB5HKMVC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NWWB5HKMVC');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Word Generator – Generate Random English Words | WordFinder</title>
+  <meta name="description" content="Free random word generator. Generate random English words by length, quantity, and starting letter. Perfect for writing prompts, games, teaching, and creative exercises.">
+  <meta name="keywords" content="random word generator, random word, generate random words, random english word, random word picker, word generator, random vocabulary, creative writing prompts">
+  <link rel="canonical" href="https://word-finder.github.io/random-word-generator">
+  <meta property="og:title" content="Random Word Generator – Generate Random English Words">
+  <meta property="og:description" content="Generate random words by length, count, and starting letter. Free tool for games, writing, education, and creative projects.">
+  <meta property="og:url" content="https://word-finder.github.io/random-word-generator">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebPage","@id":"https://word-finder.github.io/random-word-generator","name":"Random Word Generator","description":"Generate random English words by length and count for games, writing, and education."},
+      {"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"What is a random word generator?","acceptedAnswer":{"@type":"Answer","text":"A random word generator is a tool that selects words at random from a dictionary. It's used for creative writing prompts, educational games, brainstorming, party games, and many other purposes."}},
+        {"@type":"Question","name":"Can I generate words of a specific length?","acceptedAnswer":{"@type":"Answer","text":"Yes! You can filter random words by exact length (3–12 letters), by starting letter, and choose how many words to generate at once (1–50 words)."}},
+        {"@type":"Question","name":"How are the random words selected?","acceptedAnswer":{"@type":"Answer","text":"Words are randomly selected from our dictionary of 80,000+ English words using a cryptographically-random selection algorithm to ensure true randomness."}}
+      ]}
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root { --page-accent: #3A7D4E; --page-accent-dark: #2D6140; --page-accent-light: #E6F4EC; }
+
+    .page-hero { background:
+      radial-gradient(ellipse 60% 50% at 12% 25%, rgba(58,125,78,.09) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 85% 70%, rgba(212,135,10,.07) 0%, transparent 50%),
+      var(--bg);
+    }
+    .section-label  { color:var(--page-accent); background:var(--page-accent-light); }
+    .btn-primary    { background:var(--page-accent); }
+    .btn-primary:hover { background:var(--page-accent-dark); box-shadow:0 4px 16px rgba(58,125,78,.35); }
+    .results-stats  { border-left-color:var(--page-accent); }
+    .results-stats strong { color:var(--page-accent); }
+    .faq-icon       { color:var(--page-accent); background:var(--page-accent-light); }
+    .faq-item.open .faq-icon { background:var(--page-accent); }
+    .faq-question:hover { color:var(--page-accent); }
+    .length-pill.active { background:var(--page-accent); border-color:var(--page-accent); }
+    .word-chip:hover { border-color:var(--page-accent); background:var(--page-accent-light); color:var(--page-accent); }
+
+    /* Controls grid */
+    .gen-controls {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px;
+    }
+    .control-field label { display:block; font-size:.8rem; font-weight:600; color:var(--text-muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:.05em; }
+
+    /* Big random word display */
+    .word-spotlight {
+      text-align: center; padding: 40px 20px;
+      background: linear-gradient(135deg, var(--page-accent-light) 0%, var(--bg-alt) 100%);
+      border-radius: var(--radius-lg); border: 1px solid var(--border);
+      margin-bottom: 24px; position: relative; overflow: hidden;
+    }
+    .word-spotlight::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%, rgba(58,125,78,.07) 0%, transparent 60%); pointer-events:none; }
+    .spotlight-word {
+      font-family: var(--font-display); font-size: clamp(2.8rem, 8vw, 5rem); font-weight:800;
+      color: var(--page-accent); letter-spacing:.08em; text-transform:uppercase;
+      cursor:pointer; user-select:all; transition: transform .2s, color .2s;
+      display: block; margin-bottom: 8px; position: relative; z-index:1;
+    }
+    .spotlight-word:hover { transform:scale(1.04); }
+    .spotlight-word.animate { animation:popIn .4s ease; }
+    .spotlight-meta { color: var(--text-muted); font-size:.9rem; position:relative; z-index:1; }
+    .spotlight-meta strong { color:var(--text); }
+    .spotlight-actions { display:flex; justify-content:center; gap:10px; margin-top:16px; position:relative; z-index:1; }
+
+    /* Word grid */
+    .words-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px;
+      margin-top: 16px;
+    }
+    .grid-word-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 16px 14px; text-align: center; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .grid-word-card:hover { border-color:var(--page-accent); background:var(--page-accent-light); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+    .grid-word-card.copied { border-color:var(--green); background:var(--green-light); }
+    .grid-word-text { font-family:var(--font-display); font-size:1.15rem; font-weight:700; text-transform:uppercase; color:var(--text); letter-spacing:.05em; display:block; }
+    .grid-word-meta { font-size:.75rem; color:var(--text-light); margin-top:4px; }
+
+    /* History */
+    .history-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+
+    /* Dice icon spin */
+    .dice-icon { display:inline-block; font-size:1.2rem; transition:transform .4s; }
+    .btn-primary:active .dice-icon { transform:rotate(180deg); }
+
+    /* Use cases visual */
+    .use-cases-icons { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:40px; }
+    .use-icon-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:24px 16px; text-align:center; transition:all var(--transition); }
+    .use-icon-card:hover { border-color:var(--page-accent); transform:translateY(-3px); box-shadow:var(--shadow-md); }
+    .use-icon-card .icon { font-size:2rem; margin-bottom:10px; }
+    .use-icon-card h4 { font-size:.9rem; margin-bottom:6px; }
+    .use-icon-card p  { font-size:.78rem; }
+
+    @media(max-width:768px){
+      .gen-controls { grid-template-columns: 1fr 1fr; }
+      .use-cases-icons { grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:480px){
+      .gen-controls { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="site-header" role="banner"></header>
+<div id="network-bar" class="network-bar"></div>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/index">WordFinder</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Random Word Generator</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="page-hero hero" aria-label="Random Word Generator">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-kicker">🎲 Random Word Generator</p>
+        <h1>Generate <em>Random Words</em> Instantly</h1>
+        <p class="hero-lead">Create random English words for creative writing, games, classroom activities, brainstorming, and more. Filter by length, starting letter, and quantity.</p>
+        <div class="hero-actions">
+          <a href="#generator-tool" class="btn-primary"><span class="dice-icon">🎲</span> Generate Words</a>
+          <a href="#uses" class="btn-secondary">See All Uses</a>
+        </div>
+      </div>
+      <div class="hero-right" aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;gap:12px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:320px">
+          <div class="grid-word-card"><span class="grid-word-text">dream</span><span class="grid-word-meta">5 letters</span></div>
+          <div class="grid-word-card"><span class="grid-word-text">quest</span><span class="grid-word-meta">5 letters</span></div>
+          <div class="grid-word-card"><span class="grid-word-text">spark</span><span class="grid-word-meta">5 letters</span></div>
+          <div class="grid-word-card"><span class="grid-word-text">frost</span><span class="grid-word-meta">5 letters</span></div>
+          <div class="grid-word-card"><span class="grid-word-text">lunar</span><span class="grid-word-meta">5 letters</span></div>
+          <div class="grid-word-card"><span class="grid-word-text">blade</span><span class="grid-word-meta">5 letters</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GENERATOR TOOL ═══ -->
+<section class="section" id="generator-tool" aria-label="Random Word Generator Tool">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Generator</span>
+      <h2>Random Word Generator</h2>
+      <p style="max-width:540px;margin:12px auto 0">Customise your random words with powerful filters — then click Generate for an instant result.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <div class="gen-controls">
+        <div class="control-field">
+          <label for="word-count">Number of Words</label>
+          <select id="word-count" class="select-field" style="width:100%">
+            <option value="1">1 word</option>
+            <option value="5">5 words</option>
+            <option value="10" selected>10 words</option>
+            <option value="15">15 words</option>
+            <option value="20">20 words</option>
+            <option value="30">30 words</option>
+            <option value="50">50 words</option>
+          </select>
+        </div>
+        <div class="control-field">
+          <label for="word-length">Word Length</label>
+          <select id="word-length" class="select-field" style="width:100%">
+            <option value="any">Any length</option>
+            <option value="3">3 letters</option>
+            <option value="4">4 letters</option>
+            <option value="5">5 letters</option>
+            <option value="6">6 letters</option>
+            <option value="7">7 letters</option>
+            <option value="8">8 letters</option>
+            <option value="9">9 letters</option>
+            <option value="10">10 letters</option>
+            <option value="11">11 letters</option>
+            <option value="12">12 letters</option>
+          </select>
+        </div>
+        <div class="control-field">
+          <label for="start-letter">Starts With</label>
+          <select id="start-letter" class="select-field" style="width:100%">
+            <option value="">Any letter</option>
+            ${Array.from({length:26},(_,i)=>`<option value="${String.fromCharCode(97+i)}">${String.fromCharCode(65+i)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="control-field">
+          <label for="min-len-range">Min Length</label>
+          <select id="min-len-range" class="select-field" style="width:100%">
+            <option value="3">3+ letters</option>
+            <option value="4">4+ letters</option>
+            <option value="5">5+ letters</option>
+            <option value="6">6+ letters</option>
+            <option value="7">7+ letters</option>
+            <option value="8">8+ letters</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
+        <button id="generate-btn" class="btn-primary" style="flex:1;min-width:160px;justify-content:center;font-size:1rem;padding:14px">
+          <span class="dice-icon">🎲</span> Generate Random Words
+        </button>
+        <button id="generate-one-btn" class="btn-secondary" style="white-space:nowrap">One Random Word</button>
+        <button id="copy-all-btn" class="btn-icon" title="Copy all words" style="width:auto;padding:0 16px">📋 Copy All</button>
+      </div>
+
+      <!-- Single word spotlight -->
+      <div class="word-spotlight" id="word-spotlight" style="display:none">
+        <span class="spotlight-word" id="spotlight-text"></span>
+        <div class="spotlight-meta" id="spotlight-meta"></div>
+        <div class="spotlight-actions">
+          <button class="btn-primary" id="spotlight-copy" style="padding:9px 18px;font-size:.85rem">Copy Word</button>
+          <button class="btn-secondary" id="spotlight-again" style="padding:9px 18px;font-size:.85rem">🎲 Another</button>
+        </div>
+      </div>
+
+      <!-- Multi-word grid -->
+      <div id="words-output"></div>
+    </div>
+
+    <!-- History -->
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.2s">
+      <div class="tool-title" style="font-size:1.1rem">Generated Words History</div>
+      <p class="tool-desc" style="margin-bottom:12px">Your recent random words appear here for quick reference.</p>
+      <div id="word-history" class="history-list"><p style="color:var(--text-light);font-size:.88rem">No words generated yet.</p></div>
+      <button id="clear-history" class="btn-secondary" style="margin-top:14px;padding:8px 16px;font-size:.83rem">Clear History</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ USE CASES ═══ -->
+<section class="section section-alt" id="uses" aria-label="Random Word Generator Uses">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Use Cases</span>
+      <h2>Endless Uses for Random Words</h2>
+      <p style="max-width:560px;margin:12px auto 0">From classroom activities to game design, random word generators are surprisingly versatile tools.</p>
+    </div>
+    <div class="use-cases-icons">
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.04s"><div class="icon">✍️</div><h4>Writing Prompts</h4><p>Use a random word as the seed for a story, poem, or journal entry.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.08s"><div class="icon">🎮</div><h4>Word Games</h4><p>Generate words for Pictionary, Taboo, 20 Questions, and improvisational games.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.12s"><div class="icon">🏫</div><h4>Education</h4><p>Create spelling tests, vocabulary quizzes, and word challenge activities for students.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.16s"><div class="icon">🧠</div><h4>Brainstorming</h4><p>Random words can spark unexpected connections and creative solutions in workshops.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.2s"><div class="icon">🔑</div><h4>Passwords & Passphrases</h4><p>Chain random words to create memorable, secure passphrases.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.24s"><div class="icon">🎨</div><h4>Art & Design</h4><p>Use random words as conceptual constraints or naming inspiration for projects.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.28s"><div class="icon">💻</div><h4>Coding & Testing</h4><p>Developers use random word generators to seed test data and generate dummy content.</p></div>
+      <div class="use-icon-card animate-on-scroll" style="transition-delay:.32s"><div class="icon">🎯</div><h4>Improvisation & Theatre</h4><p>Drama teachers and improv coaches use random words as prompts for spontaneous scenes.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section" id="features" aria-label="Features">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">Features</span><h2>A Random Word Generator Built for Everyone</h2></div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="feature-icon icon-green">📏</div>
+        <h3>Filter by Length</h3>
+        <p>Generate words of an exact letter count, or set a minimum length. Perfect when you need words that fit specific constraints for games or exercises.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="feature-icon icon-blue">🔤</div>
+        <h3>Starting Letter Filter</h3>
+        <p>Generate words beginning with any specific letter — great for alphabet-based learning activities, themed writing exercises, or letter-specific games.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="feature-icon icon-amber">📋</div>
+        <h3>Batch Generation</h3>
+        <p>Generate 1 to 50 random words at once. Copy all generated words to your clipboard with a single click for use in documents or apps.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="feature-icon icon-accent">🎲</div>
+        <h3>True Randomness</h3>
+        <p>Words are selected using a random algorithm from 80,000+ real English words — not a small curated list. You'll discover new words every time.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="feature-icon icon-purple">🕐</div>
+        <h3>Generation History</h3>
+        <p>Your recent random words are stored in-session so you can always refer back to previously generated words without losing them.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="feature-icon icon-teal">👆</div>
+        <h3>One-Click Copy</h3>
+        <p>Click any word to instantly copy it. A clean, distraction-free interface means you spend less time hunting for what you need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EDUCATIONAL CONTENT ═══ -->
+<section class="section section-alt" aria-label="About Random Word Generators">
+  <div class="container">
+    <div class="content-section animate-on-scroll">
+      <span class="section-label">Learn</span>
+      <h2>Why Use a Random Word Generator?</h2>
+      <p>A <strong>random word generator</strong> is a surprisingly powerful tool for creativity and learning. Unlike a thesaurus or dictionary where you browse with purpose, a random word forces you to engage with unfamiliar vocabulary, make unexpected conceptual connections, and break out of habitual thinking patterns.</p>
+      <p>In psychology, this is related to the concept of "serendipitous discovery" — the idea that encountering information out of context can trigger associations your deliberate mind would never explore. This is why random words are so effective as creative writing prompts: a word like "labyrinth" or "whisper" immediately conjures emotional and sensory associations that can unlock an entire narrative direction.</p>
+      <h3>Random Words in Education</h3>
+      <p>Teachers at all levels use random word generators for classroom activities. Common educational applications include:</p>
+      <ul>
+        <li><strong>Spelling and vocabulary tests</strong> — Generate words for weekly spelling lists or pop vocabulary quizzes</li>
+        <li><strong>Dictionary skills practice</strong> — Students look up random words to practice navigating dictionaries and thesauruses</li>
+        <li><strong>Creative writing warm-ups</strong> — Students write for 5 minutes using a random word as the opening word of their piece</li>
+        <li><strong>Parts of speech identification</strong> — Classify random words as nouns, verbs, adjectives, etc.</li>
+        <li><strong>Sentence construction</strong> — Use random words to create grammatically correct sentences</li>
+      </ul>
+      <h3>Random Words for Games and Activities</h3>
+      <p>Beyond creative writing, random word generators are essential tools for many popular group activities. Pictionary and Charades players use them to avoid using the same words repeatedly. Improv theatre groups use random words as "scene starters." Debate and public speaking coaches use them to give students impromptu topics to speak on, building the ability to think quickly on any subject.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq" aria-label="FAQ">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">FAQ</span><h2>Random Word Generator — FAQ</h2></div>
+    <div class="faq-list animate-on-scroll" style="transition-delay:.1s">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">What kinds of words does the generator produce? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>The generator draws from our dictionary of 80,000+ real English words, including nouns, verbs, adjectives, and adverbs. All words are valid standard English words. We don't include slang, vulgar terms, or proper nouns in our random pool.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I generate words for a specific theme or topic? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>The current generator produces words randomly without theme filtering. For theme-specific words, try our <a href="/index">Word Finder</a> and search for words containing specific roots or prefixes related to your theme (e.g., "bio-" for biology-related words).</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">How many words can I generate at once? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>You can generate between 1 and 50 words in a single click. For larger quantities, simply click Generate multiple times — each click produces a fresh random selection.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Are the words truly random? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Yes. We use JavaScript's Math.random() function to select words from the dictionary pool. While not cryptographically secure, this provides genuine statistical randomness for all practical purposes — word games, education, and creative projects.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I use this for password generation? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Random word chains make excellent passphrases (e.g., "storm-velvet-crane-mint"). Generate 4–5 random words and join them with a separator for a highly memorable yet strong passphrase. For critical security applications, use a dedicated password manager with a true CSPRNG.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Why would I want a longer or shorter word? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Different activities suit different word lengths. Short words (3–4 letters) are great for young children, simple spelling tests, and fast-paced games. Medium words (5–7 letters) are ideal for general creative writing prompts and adult games. Longer words (8–12 letters) are perfect for advanced vocabulary building and challenging writing exercises.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I save or export my generated words? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Use the "Copy All" button to copy your entire list to the clipboard, then paste into any document, spreadsheet, or notes app. Your session history also keeps track of recently generated words for quick reference.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Does it work offline? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Once the page has loaded, the word dictionary is stored in your browser and all generation happens client-side — so yes, it continues to work even if your connection drops (as long as you don't refresh the page).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer" role="contentinfo"></footer>
+
+<script src="js/random_words.js"></script>
+<script src="components/shared.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderHeader('Random Words');
+  renderFooter();
+  renderNetworkBar('Random');
+
+  const history = [];
+  let lastGenerated = [];
+
+  function getAllWords() {
+    const allWords = [];
+    Object.values(RANDOM_WORDS).forEach(arr => allWords.push(...arr));
+    return allWords;
+  }
+
+  function pickRandom(arr, n) {
+    const out = [];
+    const copy = [...arr];
+    for (let i = 0; i < Math.min(n, copy.length); i++) {
+      const idx = Math.floor(Math.random() * copy.length);
+      out.push(copy.splice(idx, 1)[0]);
+    }
+    return out;
+  }
+
+  function getPool() {
+    const lenVal    = document.getElementById('word-length').value;
+    const startLet  = document.getElementById('start-letter').value;
+    const minLen    = parseInt(document.getElementById('min-len-range').value);
+    let pool;
+
+    if (lenVal === 'any') {
+      pool = getAllWords();
+    } else {
+      pool = RANDOM_WORDS[lenVal] || [];
+    }
+
+    if (lenVal === 'any') pool = pool.filter(w => w.length >= minLen);
+    if (startLet)         pool = pool.filter(w => w[0] === startLet);
+    return pool;
+  }
+
+  function generateWords(count) {
+    const pool = getPool();
+    if (!pool.length) return [];
+    return pickRandom(pool, count);
+  }
+
+  function renderGrid(words) {
+    const el = document.getElementById('words-output');
+    if (!words.length) {
+      el.innerHTML = `<div class="no-results"><span class="no-results-icon">🎲</span><p>No words found with these filters. Try relaxing some constraints.</p></div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div class="results-stats"><strong>${words.length}</strong> random words generated — click any word to copy it</div>
+      <div class="words-grid">${words.map(w =>
+        `<div class="grid-word-card" data-word="${w}">
+          <span class="grid-word-text">${w}</span>
+          <span class="grid-word-meta">${w.length} letters</span>
+        </div>`
+      ).join('')}</div>
+    `;
+    el.querySelectorAll('.grid-word-card').forEach(card => {
+      card.addEventListener('click', () => {
+        navigator.clipboard?.writeText(card.dataset.word);
+        card.classList.add('copied');
+        showCopyToast(`"${card.dataset.word}" copied!`);
+        setTimeout(()=>card.classList.remove('copied'), 1400);
+      });
+    });
+    addToHistory(words);
+  }
+
+  function renderSpotlight(word) {
+    const sp = document.getElementById('word-spotlight');
+    const sw = document.getElementById('spotlight-text');
+    const sm = document.getElementById('spotlight-meta');
+    sp.style.display = 'block';
+    sw.textContent = word.toUpperCase();
+    sw.classList.remove('animate');
+    void sw.offsetWidth;
+    sw.classList.add('animate');
+    sm.innerHTML = `<strong>${word.length}</strong> letters`;
+  }
+
+  function addToHistory(words) {
+    words.forEach(w => { if (!history.includes(w)) history.unshift(w); });
+    if (history.length > 80) history.splice(80);
+    renderHistory();
+    lastGenerated = words;
+  }
+
+  function renderHistory() {
+    const el = document.getElementById('word-history');
+    if (!history.length) { el.innerHTML = `<p style="color:var(--text-light);font-size:.88rem">No words generated yet.</p>`; return; }
+    el.innerHTML = history.slice(0,60).map(w =>
+      `<span class="word-chip" data-word="${w}">${w}</span>`
+    ).join('');
+    addCopyChips(el);
+  }
+
+  document.getElementById('generate-btn').addEventListener('click', () => {
+    const count = parseInt(document.getElementById('word-count').value);
+    const words = generateWords(count);
+    document.getElementById('word-spotlight').style.display = 'none';
+    renderGrid(words);
+  });
+
+  document.getElementById('generate-one-btn').addEventListener('click', () => {
+    const words = generateWords(1);
+    if (words.length) {
+      document.getElementById('words-output').innerHTML = '';
+      renderSpotlight(words[0]);
+      addToHistory(words);
+    }
+  });
+
+  document.getElementById('copy-all-btn').addEventListener('click', () => {
+    if (!lastGenerated.length) { showCopyToast('Generate words first!'); return; }
+    navigator.clipboard?.writeText(lastGenerated.join('\n'));
+    showCopyToast(`${lastGenerated.length} words copied!`);
+  });
+
+  document.getElementById('spotlight-copy').addEventListener('click', () => {
+    const w = document.getElementById('spotlight-text').textContent.toLowerCase();
+    navigator.clipboard?.writeText(w);
+    showCopyToast(`"${w}" copied!`);
+  });
+
+  document.getElementById('spotlight-again').addEventListener('click', () => {
+    const words = generateWords(1);
+    if (words.length) { renderSpotlight(words[0]); addToHistory(words); }
+  });
+
+  document.getElementById('clear-history').addEventListener('click', () => {
+    history.length = 0; renderHistory();
+  });
+
+  // Generate on load
+  const words = generateWords(10);
+  renderGrid(words);
+});
+</script>
+</body>
+</html>
