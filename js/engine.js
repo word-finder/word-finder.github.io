@@ -1,23 +1,40 @@
 // Word Finder Engine
 // Requires WORD_LIST to be loaded from wordlist.js
 
+// Word Finder Engine - loads from words.txt
 const WordEngine = (() => {
   let wordSet = null;
   let wordsByLength = {};
+  let isReady = false;
+  let pendingCallbacks = [];
+
+  function loadDictionary() {
+    return fetch('words.txt')
+      .then(response => response.text())
+      .then(text => {
+        const words = text.split(/\r?\n/).filter(w => w.trim().length > 0);
+        wordSet = new Set(words);
+        words.forEach(w => {
+          const len = w.length;
+          if (!wordsByLength[len]) wordsByLength[len] = [];
+          wordsByLength[len].push(w);
+        });
+        isReady = true;
+        pendingCallbacks.forEach(cb => cb());
+        pendingCallbacks = [];
+      });
+  }
+
+  function ready(callback) {
+    if (isReady) callback();
+    else pendingCallbacks.push(callback);
+  }
 
   function init() {
-    if (!window.WORD_LIST) return;
-    wordSet = new Set(WORD_LIST);
-    WORD_LIST.forEach(w => {
-      const len = w.length;
-      if (!wordsByLength[len]) wordsByLength[len] = [];
-      wordsByLength[len].push(w);
-    });
+    return loadDictionary();
   }
 
-  function isValid(word) {
-    return wordSet && wordSet.has(word.toLowerCase());
-  }
+  // ... rest of your existing functions remain the same ...
 
   // Find all words that can be formed from given letters (anagram/subset)
   function findFromLetters(letters, options = {}) {
