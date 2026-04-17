@@ -22,16 +22,90 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@graph":[
-      {"@type":"WebPage","@id":"https://word-finder.github.io/acronym-generator","name":"Acronym Generator","description":"Generate acronyms from phrases or create backronyms where each letter starts a word."},
-      {"@type":"FAQPage","mainEntity":[
-        {"@type":"Question","name":"What is an acronym?","acceptedAnswer":{"@type":"Answer","text":"An acronym is an abbreviation formed from the initial letters of other words and pronounced as a word (e.g., NASA, RADAR, SCUBA). This distinguishes it from an initialism, where each letter is pronounced separately (e.g., FBI, CIA, HTML)."}},
-        {"@type":"Question","name":"What is a backronym?","acceptedAnswer":{"@type":"Answer","text":"A backronym is a phrase constructed so that its initials spell out a particular word. Unlike a regular acronym (where the phrase came first), a backronym starts with the acronym and builds a phrase around it. For example, DARE (Drug Abuse Resistance Education) is a backronym."}},
-        {"@type":"Question","name":"How does the acronym generator work?","acceptedAnswer":{"@type":"Answer","text":"For acronym generation: enter a phrase and we extract the first letter of each significant word to create your acronym. For backronym generation: enter an acronym/word and we find words starting with each letter to construct a meaningful phrase."}}
-      ]}
-    ]
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://word-finder.github.io/acronym-generator.html#webapp",
+      "name": "Acronym Generator & Backronym Maker",
+      "description": "A comprehensive toolkit to generate acronyms from phrases, build custom backronyms interactively, and decode common abbreviations.",
+      "url": "https://word-finder.github.io/acronym-generator.html",
+      "applicationCategory": "EducationalApplication, BusinessApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript for interactive generation and decoding features.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Phrase to Acronym conversion with small-word filtering",
+        "Interactive Backronym Builder with curated word suggestions",
+        "Acronym Decoder and Dictionary",
+        "One-click copy to clipboard",
+        "Mnemonic device creation for educational use"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "WordFinder"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://word-finder.github.io/acronym-generator.html",
+      "name": "Acronym Generator – Create Acronyms & Backronyms | WordFinder",
+      "description": "Free acronym generator and backronym creator. Generate acronyms from phrases, decode what acronyms stand for, or create a fun backronym where each letter starts a word.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "WordFinder",
+            "item": "https://word-finder.github.io/index.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Acronym Generator"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@id": "https://word-finder.github.io/acronym-generator.html#webapp"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is an acronym?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An acronym is an abbreviation formed from the initial letters of other words and pronounced as a word (e.g., NASA, RADAR, SCUBA). This distinguishes it from an initialism, where each letter is pronounced separately (e.g., FBI, CIA, HTML)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a backronym?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A backronym is a phrase constructed so that its initials spell out a particular word. Unlike a regular acronym (where the phrase came first), a backronym starts with the acronym and builds a phrase around it. For example, DARE (Drug Abuse Resistance Education) is a backronym."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the acronym generator work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For acronym generation: enter a phrase and we extract the first letter of each significant word to create your acronym. For backronym generation: enter an acronym/word and we find words starting with each letter to construct a meaningful phrase."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
   <link rel="stylesheet" href="css/shared.css">
   <style>
