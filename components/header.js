@@ -14,12 +14,12 @@ function renderHeader() {
       </a>
       <nav class="main-nav" id="main-nav" role="navigation" aria-label="Main navigation">
         <ul>
-          <li><a href="#finder-tool">Word Finder</a></li>
-          <li><a href="#unscramble">Unscramble</a></li>
-          <li><a href="#word-length">By Length</a></li>
-          <li><a href="#starts-ends">Starts/Ends</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#word-tips">Tips & Tricks</a></li>
+          <li><a href="/#finder-tool">Word Finder</a></li>
+          <li><a href="crossword-solver">Crossword Solver</a></li>
+          <li><a href="random-word-generator">Random Words</a></li>
+          <li><a href="rhyming-words">Rhyming Words</a></li>          
+          <li><a href="acronym-generator">Acronym Generator</a></li>
+          <li><a href="about">About us</a></li>
         </ul>
       </nav>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
