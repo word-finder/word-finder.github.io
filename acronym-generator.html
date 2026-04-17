@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NWWB5HKMVC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NWWB5HKMVC');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acronym Generator – Create Acronyms & Backronyms | WordFinder</title>
+  <meta name="description" content="Free acronym generator and backronym creator. Generate acronyms from phrases, decode what acronyms stand for, or create a fun backronym where each letter starts a word.">
+  <meta name="keywords" content="acronym generator, backronym generator, acronym maker, create acronym, what does acronym stand for, acronym creator, abbreviation generator, acronym decoder, make acronym from letters">
+  <link rel="canonical" href="https://word-finder.github.io/acronym-generator">
+  <meta property="og:title" content="Acronym Generator – Create Acronyms & Backronyms">
+  <meta property="og:description" content="Generate acronyms from any phrase, or create backronyms where each letter stands for a word. Free, instant, and fun!">
+  <meta property="og:url" content="https://word-finder.github.io/acronym-generator">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebPage","@id":"https://word-finder.github.io/acronym-generator","name":"Acronym Generator","description":"Generate acronyms from phrases or create backronyms where each letter starts a word."},
+      {"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"What is an acronym?","acceptedAnswer":{"@type":"Answer","text":"An acronym is an abbreviation formed from the initial letters of other words and pronounced as a word (e.g., NASA, RADAR, SCUBA). This distinguishes it from an initialism, where each letter is pronounced separately (e.g., FBI, CIA, HTML)."}},
+        {"@type":"Question","name":"What is a backronym?","acceptedAnswer":{"@type":"Answer","text":"A backronym is a phrase constructed so that its initials spell out a particular word. Unlike a regular acronym (where the phrase came first), a backronym starts with the acronym and builds a phrase around it. For example, DARE (Drug Abuse Resistance Education) is a backronym."}},
+        {"@type":"Question","name":"How does the acronym generator work?","acceptedAnswer":{"@type":"Answer","text":"For acronym generation: enter a phrase and we extract the first letter of each significant word to create your acronym. For backronym generation: enter an acronym/word and we find words starting with each letter to construct a meaningful phrase."}}
+      ]}
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root { --page-accent: #D4870A; --page-accent-dark: #B87208; --page-accent-light: #FEF3E2; }
+
+    .page-hero { background:
+      radial-gradient(ellipse 60% 50% at 10% 25%, rgba(212,135,10,.10) 0%, transparent 55%),
+      radial-gradient(ellipse 45% 45% at 90% 75%, rgba(44,95,138,.07) 0%, transparent 50%),
+      var(--bg);
+    }
+    .section-label { color:var(--page-accent); background:var(--page-accent-light); }
+    .btn-primary   { background:var(--page-accent); }
+    .btn-primary:hover { background:var(--page-accent-dark); box-shadow:0 4px 16px rgba(212,135,10,.35); }
+    .results-stats { border-left-color:var(--page-accent); }
+    .results-stats strong { color:var(--page-accent); }
+    .faq-icon      { color:var(--page-accent); background:var(--page-accent-light); }
+    .faq-item.open .faq-icon { background:var(--page-accent); }
+    .faq-question:hover { color:var(--page-accent); }
+
+    /* Mode tabs */
+    .mode-tabs { display:flex; border-bottom:2px solid var(--border); margin-bottom:28px; }
+    .mode-tab { padding:11px 22px; font-size:.92rem; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; margin-bottom:-2px; cursor:pointer; transition:color var(--transition),border-color var(--transition); background:none; border-left:none; border-right:none; border-top:none; }
+    .mode-tab:hover { color:var(--page-accent); }
+    .mode-tab.active { color:var(--page-accent); border-bottom-color:var(--page-accent); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:block; }
+
+    /* Acronym display */
+    .acronym-display {
+      background: linear-gradient(135deg, var(--page-accent-light), var(--bg-alt));
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 32px 36px; margin-top: 24px; position:relative; overflow:hidden;
+    }
+    .acronym-display::after { content:''; position:absolute; top:-2px; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--page-accent), var(--amber)); }
+    .acronym-letters {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .acro-letter-block {
+      background: var(--page-accent); color: white;
+      width: 52px; height: 52px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.6rem; font-weight: 800;
+      animation: popIn .4s ease both;
+    }
+    .acro-result-text { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:var(--text); margin-bottom:8px; line-height:1.4; }
+    .acro-result-text .acro-initial { color:var(--page-accent); font-size:1.6rem; }
+    .acro-copy-row { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .acro-badge { display:inline-block; padding:5px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:99px; font-size:.82rem; font-weight:600; color:var(--text-muted); }
+
+    /* Backronym builder */
+    .backronym-builder { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+    .backronym-row { display:flex; align-items:center; gap:12px; animation:fadeUp .3s ease both; }
+    .backronym-letter {
+      width: 48px; height: 48px; background: var(--page-accent); color: white;
+      border-radius: 8px; display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-display); font-size:1.4rem; font-weight:800; flex-shrink:0;
+    }
+    .backronym-word-list { display:flex; flex-wrap:wrap; gap:6px; flex:1; }
+    .backronym-word-chip {
+      padding:5px 12px; border-radius:99px; font-size:.84rem; font-weight:500;
+      border:1px solid var(--border); background:var(--bg-card); cursor:pointer;
+      transition:all var(--transition); color:var(--text);
+    }
+    .backronym-word-chip:hover { border-color:var(--page-accent); background:var(--page-accent-light); color:var(--page-accent); }
+    .backronym-word-chip.selected { background:var(--page-accent); border-color:var(--page-accent); color:white; }
+    .backronym-input { flex:1; padding:8px 14px; font-size:.9rem; font-family:var(--font-body); border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg-alt); color:var(--text); transition:border-color var(--transition); }
+    .backronym-input:focus { outline:none; border-color:var(--page-accent); background:var(--bg-card); }
+
+    /* Backronym result */
+    .backronym-result {
+      background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md);
+      padding:20px 24px; margin-top:20px;
+    }
+    .backronym-result-phrase { font-family:var(--font-display); font-size:1.3rem; font-weight:700; color:var(--text); line-height:1.5; }
+    .backronym-result-phrase .br-initial { color:var(--page-accent); font-size:1.5rem; }
+
+    /* Famous acronyms */
+    .famous-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-top:28px; }
+    .famous-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px 18px; transition:all var(--transition); }
+    .famous-card:hover { border-color:var(--page-accent); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+    .famous-acronym { font-family:var(--font-display); font-size:1.3rem; font-weight:800; color:var(--page-accent); letter-spacing:.06em; }
+    .famous-full { font-size:.8rem; color:var(--text-muted); margin-top:4px; line-height:1.4; }
+    .famous-field { font-size:.72rem; color:var(--text-light); margin-top:6px; }
+
+    @media(max-width:768px){ .backronym-row{flex-direction:column;align-items:flex-start} .acro-letter-block{width:44px;height:44px;font-size:1.3rem} }
+  </style>
+</head>
+<body>
+
+<header id="site-header" role="banner"></header>
+<div id="network-bar" class="network-bar"></div>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/index">WordFinder</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Acronym Generator</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="page-hero hero" aria-label="Acronym Generator">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-kicker">🔡 Acronym & Backronym Creator</p>
+        <h1>Acronym <em>Generator</em> & Backronym Maker</h1>
+        <p class="hero-lead">Create catchy acronyms from any phrase, build clever backronyms letter-by-letter, or look up what famous acronyms stand for. The ultimate acronym toolkit.</p>
+        <div class="hero-actions">
+          <a href="#acronym-tool" class="btn-primary">Create Acronym →</a>
+          <a href="#famous-acronyms" class="btn-secondary">Famous Acronyms</a>
+        </div>
+      </div>
+      <div class="hero-right" aria-hidden="true">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 20px">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Phrase → Acronym</div>
+            <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-muted)"><span style="color:var(--page-accent);font-weight:800">N</span>ational <span style="color:var(--page-accent);font-weight:800">A</span>eronautics <span style="color:var(--page-accent);font-weight:800">S</span>pace <span style="color:var(--page-accent);font-weight:800">A</span>dministration</div>
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--page-accent);margin-top:8px">NASA</div>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 20px">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Backronym</div>
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--page-accent)">BRAVE</div>
+            <div style="font-family:var(--font-display);font-size:.92rem;color:var(--text-muted);margin-top:6px"><span style="color:var(--page-accent);font-weight:800">B</span>old · <span style="color:var(--page-accent);font-weight:800">R</span>esilient · <span style="color:var(--page-accent);font-weight:800">A</span>daptable · <span style="color:var(--page-accent);font-weight:800">V</span>isionary · <span style="color:var(--page-accent);font-weight:800">E</span>nduring</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAIN TOOL ═══ -->
+<section class="section" id="acronym-tool" aria-label="Acronym Generator Tool">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Tools</span>
+      <h2>Acronym & Backronym Generator</h2>
+      <p style="max-width:540px;margin:12px auto 0">Two powerful tools: create acronyms from phrases, or build backronyms where every letter stands for a word.</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <div class="mode-tabs" role="tablist">
+        <button class="mode-tab active" data-tab="phrase-to-acronym">Phrase → Acronym</button>
+        <button class="mode-tab" data-tab="backronym">Backronym Builder</button>
+        <button class="mode-tab" data-tab="decoder">Acronym Decoder</button>
+      </div>
+
+      <!-- Phrase to Acronym -->
+      <div class="mode-panel active" id="panel-phrase-to-acronym">
+        <div class="tool-title">Acronym Generator</div>
+        <p class="tool-desc">Enter a phrase, name, or sentence and instantly create an acronym from the first letters of each word.</p>
+        <form id="phrase-form" autocomplete="off">
+          <div class="input-group" style="margin-bottom:12px">
+            <input class="input-field" type="text" id="phrase-input"
+              placeholder="Enter your phrase (e.g. Natural Language Processing)"
+              maxlength="100" aria-label="Phrase to convert to acronym" autocomplete="off">
+            <button type="submit" class="btn-primary">Generate</button>
+          </div>
+        </form>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <label style="display:flex;align-items:center;gap:7px;font-size:.85rem;font-weight:500;cursor:pointer">
+            <input type="checkbox" id="skip-small-words" checked style="accent-color:var(--page-accent)">
+            Skip small words (a, an, the, of, in…)
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:.85rem;font-weight:500;cursor:pointer">
+            <input type="checkbox" id="uppercase" checked style="accent-color:var(--page-accent)">
+            Uppercase result
+          </label>
+        </div>
+        <div id="phrase-result"></div>
+      </div>
+
+      <!-- Backronym Builder -->
+      <div class="mode-panel" id="panel-backronym">
+        <div class="tool-title">Backronym Builder</div>
+        <p class="tool-desc">Enter an acronym or any word, and we'll suggest words starting with each letter so you can build a creative phrase.</p>
+        <form id="backronym-form" autocomplete="off">
+          <div class="input-group" style="margin-bottom:20px">
+            <input class="input-field" type="text" id="backronym-input"
+              placeholder="Enter acronym to expand (e.g. TEAM, HERO, SPARK)"
+              maxlength="12" spellcheck="false" autocomplete="off"
+              style="text-transform:uppercase;letter-spacing:.12em;font-size:1.05rem;font-weight:600">
+            <button type="submit" class="btn-primary">Build Backronym</button>
+          </div>
+        </form>
+        <div id="backronym-builder-area"></div>
+        <div id="backronym-result-display"></div>
+      </div>
+
+      <!-- Decoder -->
+      <div class="mode-panel" id="panel-decoder">
+        <div class="tool-title">What Does It Stand For?</div>
+        <p class="tool-desc">Look up common acronyms and abbreviations to find out what they stand for.</p>
+        <div class="input-group" style="margin-bottom:20px">
+          <input class="input-field" type="text" id="decoder-input"
+            placeholder="Type an acronym (e.g. NASA, ASAP, RADAR)"
+            maxlength="20" spellcheck="false" autocomplete="off"
+            style="text-transform:uppercase;letter-spacing:.1em;font-size:1.05rem">
+          <button id="decoder-search" class="btn-primary">Look Up</button>
+        </div>
+        <div id="decoder-result"></div>
+        <p class="hint-text" style="margin-top:10px">💡 Can't find it? Use the Backronym Builder to create your own meaning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAMOUS ACRONYMS ═══ -->
+<section class="section section-alt" id="famous-acronyms" aria-label="Famous Acronyms">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Reference</span>
+      <h2>Famous Acronyms & Abbreviations</h2>
+      <p style="max-width:540px;margin:12px auto 0">A curated collection of well-known acronyms across technology, science, government, and everyday life.</p>
+    </div>
+    <div class="famous-grid animate-on-scroll" style="transition-delay:.1s" id="famous-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section" id="features" aria-label="Features">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">Features</span><h2>Everything You Need for Acronyms</h2></div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="feature-icon icon-amber">🔤</div>
+        <h3>Instant Acronym Creation</h3>
+        <p>Type any phrase and get your acronym in one click. Smart filtering skips small words (the, of, a) for cleaner results.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="feature-icon icon-blue">🔨</div>
+        <h3>Interactive Backronym Builder</h3>
+        <p>Build backronyms interactively — select from multiple word suggestions for each letter or type your own words.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="feature-icon icon-green">📚</div>
+        <h3>Acronym Dictionary</h3>
+        <p>Look up hundreds of common acronyms across technology, science, medicine, government, and everyday language.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="feature-icon icon-accent">📋</div>
+        <h3>One-Click Copy</h3>
+        <p>Copy your acronym, the full expanded phrase, or the complete backronym to clipboard with a single click.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="feature-icon icon-purple">🎯</div>
+        <h3>Business & Branding Use</h3>
+        <p>Perfect for creating company name acronyms, project code names, team names, and brand identity acronyms.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="feature-icon icon-teal">🎓</div>
+        <h3>Educational Tool</h3>
+        <p>Teachers use acronyms as mnemonic devices. Build memorable learning acronyms (like ROYGBIV or HOMES) for students.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ USE CASES ═══ -->
+<section class="section section-alt" aria-label="Acronym Use Cases">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">Applications</span><h2>Why People Use Acronym Generators</h2></div>
+    <div class="use-cases-grid">
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="use-case-icon icon-amber">🏢</div>
+        <div><h4>Business Naming & Branding</h4><p>Entrepreneurs use acronym generators to create memorable company names. IBM, IKEA, and ASUS all have acronym origins. Our tool helps you find whether your business name creates a pronounceable, meaningful acronym.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="use-case-icon icon-green">🎓</div>
+        <div><h4>Mnemonic Devices for Learning</h4><p>Teachers create acronyms to help students memorize information: PEMDAS for math order of operations, HOMES for the Great Lakes. Build custom mnemonics for your curriculum with our backronym builder.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="use-case-icon icon-blue">💻</div>
+        <div><h4>Technology & Software Projects</h4><p>Developers and teams often name projects, protocols, and tools with clever acronyms. GNU, LAMP, MEAN stack — our generator helps you create a memorable acronym for your next technical project.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="use-case-icon icon-accent">✍️</div>
+        <div><h4>Creative Writing & Worldbuilding</h4><p>Writers use acronyms to name fictional organizations, government agencies, and technologies in their stories. Create realistic-sounding acronyms that fit your fictional world's tone and setting.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="use-case-icon icon-purple">💪</div>
+        <div><h4>Team & Group Names</h4><p>Sports teams, study groups, and clubs love creating acronym names that stand for their values. Use the backronym builder to construct a name where every letter reinforces your team's identity.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="use-case-icon icon-teal">🎮</div>
+        <div><h4>Games & Icebreakers</h4><p>Popular party games involve creating backronyms — give everyone a word and see who creates the funniest or most creative acronym expansion. Perfect icebreaker for work events and social gatherings.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EDUCATIONAL CONTENT ═══ -->
+<section class="section" aria-label="About Acronyms">
+  <div class="container">
+    <div class="content-section animate-on-scroll">
+      <span class="section-label">Learn</span>
+      <h2>Acronyms vs Initialisms vs Backronyms: What's the Difference?</h2>
+      <p>Many people use the term "acronym" loosely to mean any abbreviation made of initials. Technically, there's an important distinction between acronyms and initialisms — and a third related concept called a backronym.</p>
+      <h3>Acronyms</h3>
+      <p>An <strong>acronym</strong> is an abbreviation formed from the initial letters of a phrase and pronounced as a single word. Classic examples include <strong>NASA</strong> (National Aeronautics and Space Administration), <strong>RADAR</strong> (Radio Detection And Ranging), and <strong>SCUBA</strong> (Self-Contained Underwater Breathing Apparatus). The key feature is that you say the word as a whole: "NASA" not "N-A-S-A."</p>
+      <h3>Initialisms</h3>
+      <p>An <strong>initialism</strong> is also formed from initial letters but each letter is pronounced separately: <strong>FBI</strong> (Federal Bureau of Investigation), <strong>HTML</strong> (HyperText Markup Language), <strong>CEO</strong> (Chief Executive Officer). In casual usage, these are often called acronyms too — our generator handles both types.</p>
+      <h3>Backronyms</h3>
+      <p>A <strong>backronym</strong> works in reverse: you start with an existing word and construct a phrase where each letter stands for a word. The word usually relates to the phrase's meaning. DARE (Drug Abuse Resistance Education), AMBER Alert (America's Missing: Broadcast Emergency Response), and SOS (which has been retroactively given meanings like "Save Our Souls") are famous backronyms.</p>
+      <h3>How to Create a Memorable Acronym</h3>
+      <p>The best acronyms follow these principles:</p>
+      <ul>
+        <li><strong>Pronounceability</strong> — An acronym people can say out loud is far more memorable than one requiring letter-by-letter spelling</li>
+        <li><strong>Relevance</strong> — The word formed should ideally relate to or reinforce the concept it represents</li>
+        <li><strong>Simplicity</strong> — Aim for 3–5 letters; longer acronyms are harder to remember</li>
+        <li><strong>Avoid awkward sounds</strong> — Test how it sounds when spoken aloud before committing</li>
+        <li><strong>Check for existing uses</strong> — Ensure your new acronym doesn't already stand for something else in your field</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section section-alt" id="faq" aria-label="FAQ">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">FAQ</span><h2>Acronym Generator — Frequently Asked Questions</h2></div>
+    <div class="faq-list animate-on-scroll" style="transition-delay:.1s">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">What is the difference between an acronym and an abbreviation? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>An <strong>abbreviation</strong> is any shortened form of a word or phrase (e.g., Dr., etc., approx.). An <strong>acronym</strong> is specifically an abbreviation formed from the initial letters of other words and pronounced as a word (NASA, SCUBA). All acronyms are abbreviations, but not all abbreviations are acronyms.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">How do I create a good acronym for my business? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Start by listing your brand's key values or descriptive words. Enter different phrase combinations into our generator to see what acronyms they produce. Look for combinations that create a pronounceable word with positive connotations. Alternatively, decide on the acronym first (a word that represents your brand) and use our backronym builder to construct a phrase around it.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">What is a recursive acronym? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>A recursive acronym is one where the acronym itself appears in the phrase it stands for. Famous examples include GNU (GNU's Not Unix) and PHP (PHP: Hypertext Preprocessor). These are popular in software and hacker culture as a kind of playful self-referential humour.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I use this tool to decode acronyms? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Yes! Use the "Acronym Decoder" tab to look up what common acronyms stand for. We include hundreds of widely-used acronyms from technology, science, medicine, government, and everyday life. If the acronym you're looking for isn't in our database, try searching for it online alongside the context (e.g., "NASA meaning" or "ASAP meaning").</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">How does the backronym builder suggest words? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>For each letter in your acronym, our builder searches our dictionary and suggests relevant words starting with that letter. We prioritise common, meaningful words — nouns, adjectives, and action verbs — that are likely to work well in a phrase. You can select from suggestions or type your own word for any letter.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">What's a good length for an acronym? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>3 to 5 letters is the sweet spot for memorable acronyms. Three-letter acronyms (TLAs — themselves a Three Letter Acronym!) like IBM and CIA are clean and professional. Four to five letters (NASA, RADAR, SCUBA) can form real words that are highly memorable. Anything longer than 6 letters becomes difficult to pronounce and remember as a single unit.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Are there acronyms for every letter of the alphabet? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Yes! Every letter of the English alphabet features in famous acronyms. Some less common ones: X appears in NEXRAD (Next Generation Radar), Q in QR code (Quick Response), and Z in ZIP code (Zone Improvement Plan). Our backronym builder covers all 26 letters with word suggestions.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer" role="contentinfo"></footer>
+
+<script src="js/random_words.js"></script>
+<script src="components/shared.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderHeader('Acronym Generator');
+  renderFooter();
+  renderNetworkBar('Acronym');
+
+  // Tab switching
+  document.querySelectorAll('.mode-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  const SMALL_WORDS = new Set(['a','an','the','of','in','on','at','to','for','and','or','but','is','are','was','were','by','with','from','as','be','it','this','that','these','those']);
+
+  // ── Phrase → Acronym ──────────────────────────────────
+  document.getElementById('phrase-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const phrase = document.getElementById('phrase-input').value.trim();
+    if (!phrase) return;
+    const skipSmall = document.getElementById('skip-small-words').checked;
+    const upper     = document.getElementById('uppercase').checked;
+    const words = phrase.split(/\s+/).filter(w => w.length > 0);
+    const filtered = skipSmall ? words.filter(w => !SMALL_WORDS.has(w.toLowerCase())) : words;
+    if (!filtered.length) { document.getElementById('phrase-result').innerHTML = `<p style="color:var(--text-muted)">No significant words found. Uncheck "Skip small words" and try again.</p>`; return; }
+    const letters = filtered.map(w => w[0].toUpperCase());
+    const acronym = upper ? letters.join('') : letters.join('').toLowerCase();
+
+    const letterBlocks = letters.map((l, i) => `<div class="acro-letter-block" style="animation-delay:${i*.08}s">${l}</div>`).join('');
+    const phraseHTML = filtered.map(w => `<span class="acro-initial" style="font-size:inherit">${w[0].toUpperCase()}</span>${w.slice(1)} `).join('').trim();
+
+    document.getElementById('phrase-result').innerHTML = `
+      <div class="acronym-display">
+        <div class="acro-badge" style="margin-bottom:12px">Your Acronym</div>
+        <div class="acronym-letters">${letterBlocks}</div>
+        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--page-accent);margin-bottom:12px;letter-spacing:.12em">${acronym}</div>
+        <div class="acro-result-text">${phraseHTML}</div>
+        <div class="acro-copy-row">
+          <button class="btn-primary" onclick="navigator.clipboard?.writeText('${acronym}');showCopyToast('Acronym copied!')">Copy ${acronym}</button>
+          <button class="btn-secondary" onclick="navigator.clipboard?.writeText('${filtered.join(' ')}');showCopyToast('Phrase copied!')">Copy Phrase</button>
+        </div>
+      </div>
+    `;
+  });
+
+  // ── Backronym Builder ─────────────────────────────────
+  const BACKRONYM_WORDS = {
+    'a':['Adaptive','Agile','Ambitious','Authentic','Awesome','Advanced','Active','Aligned'],
+    'b':['Bold','Brave','Brilliant','Balanced','Boundless','Bright','Building','Benevolent'],
+    'c':['Creative','Courageous','Collaborative','Committed','Capable','Curious','Clear','Connected'],
+    'd':['Dynamic','Dedicated','Driven','Determined','Diligent','Decisive','Diverse','Durable'],
+    'e':['Empowered','Excellent','Energetic','Evolving','Effective','Engaged','Ethical','Enduring'],
+    'f':['Focused','Fearless','Forward','Flexible','Fierce','Faithful','Flourishing','Future'],
+    'g':['Grounded','Great','Growing','Genuine','Gifted','Goal-driven','Global','Graceful'],
+    'h':['Humble','Honest','Heroic','Harmonious','Hopeful','Human','High-impact','Hard-working'],
+    'i':['Innovative','Inspired','Impactful','Inclusive','Intentional','Intelligent','Inventive','Intuitive'],
+    'j':['Just','Joyful','Jubilant','Journey-focused','Judicious','Joined','Jolted'],
+    'k':['Kind','Knowledgeable','Keen','Key','Kinetic','Kaleidoscopic'],
+    'l':['Loyal','Leaders','Learning','Limitless','Luminous','Lively','Lasting','Leveraged'],
+    'm':['Motivated','Meaningful','Mindful','Mastery','Mission-driven','Modern','Mighty'],
+    'n':['Noble','Nimble','Next-gen','Nurturing','Natural','Networked','Notable'],
+    'o':['Outstanding','Open','Optimistic','Original','Organized','Outcome-focused','Objective'],
+    'p':['Purposeful','Powerful','Proactive','Progressive','Passionate','Persistent','Principled'],
+    'q':['Quality-driven','Quick','Questioning','Quest-led','Quintessential'],
+    'r':['Resilient','Results-driven','Resourceful','Responsive','Reliable','Remarkable'],
+    's':['Strategic','Strong','Skilled','Sustainable','Solutions-focused','Synergistic'],
+    't':['Transformative','Tenacious','Thoughtful','Trusted','Talented','Transparent'],
+    'u':['United','Unstoppable','Unique','Uplifting','User-focused','Unified'],
+    'v':['Visionary','Vibrant','Valuable','Versatile','Vigorous','Victory-oriented'],
+    'w':['Winning','Wise','World-class','Wholesome','Well-rounded','Working'],
+    'x':['X-factor','Xtra-mile','Xenial','Xceptional'],
+    'y':['Young','Yearning','Youthful','Yielding','Yes-focused'],
+    'z':['Zealous','Zeal-driven','Zero-waste','Zestful'],
+  };
+
+  let selectedWords = {};
+
+  document.getElementById('backronym-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const word = document.getElementById('backronym-input').value.trim().toUpperCase().replace(/[^A-Z]/g,'');
+    if (!word) return;
+    selectedWords = {};
+    const area = document.getElementById('backronym-builder-area');
+    const rows = word.split('').map((letter, i) => {
+      const lc = letter.toLowerCase();
+      const suggestions = BACKRONYM_WORDS[lc] || [`${letter}word`];
+      selectedWords[i] = suggestions[0];
+      return `
+        <div class="backronym-row" style="animation-delay:${i*.07}s">
+          <div class="backronym-letter">${letter}</div>
+          <div class="backronym-word-list">
+            ${suggestions.map((w,j) =>
+              `<span class="backronym-word-chip ${j===0?'selected':''}" data-idx="${i}" data-word="${w}">${w}</span>`
+            ).join('')}
+            <input class="backronym-input" data-idx="${i}" placeholder="Type your own..." style="max-width:160px" autocomplete="off">
+          </div>
+        </div>
+      `;
+    }).join('');
+    area.innerHTML = rows;
+    renderBackronymResult(word);
+
+    area.querySelectorAll('.backronym-word-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const idx = parseInt(chip.dataset.idx);
+        area.querySelectorAll(`.backronym-word-chip[data-idx="${idx}"]`).forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        selectedWords[idx] = chip.dataset.word;
+        renderBackronymResult(word);
+      });
+    });
+
+    area.querySelectorAll('.backronym-input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.idx);
+        if (inp.value.trim()) { selectedWords[idx] = inp.value.trim(); renderBackronymResult(word); }
+      });
+    });
+  });
+
+  function renderBackronymResult(word) {
+    const phrase = Object.values(selectedWords).join(' ');
+    const display = document.getElementById('backronym-result-display');
+    const phraseHL = phrase.split(' ').map((w,i) =>
+      `<span class="br-initial">${w[0]}</span>${w.slice(1)}`
+    ).join(' ');
+    display.innerHTML = `
+      <div class="backronym-result">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Your Backronym</div>
+        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--page-accent);letter-spacing:.1em;margin-bottom:10px">${word}</div>
+        <div class="backronym-result-phrase">${phraseHL}</div>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+          <button class="btn-primary" onclick="navigator.clipboard?.writeText('${word}: ${phrase}');showCopyToast('Backronym copied!')">Copy Full</button>
+          <button class="btn-secondary" onclick="navigator.clipboard?.writeText('${phrase}');showCopyToast('Phrase copied!')">Copy Phrase</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Acronym Decoder ───────────────────────────────────
+  const ACRONYM_DB = {
+    'NASA':'National Aeronautics and Space Administration',
+    'RADAR':'Radio Detection And Ranging',
+    'SCUBA':'Self-Contained Underwater Breathing Apparatus',
+    'LASER':'Light Amplification by Stimulated Emission of Radiation',
+    'ASAP':'As Soon As Possible',
+    'AWOL':'Absent Without Official Leave',
+    'FAQ':'Frequently Asked Questions',
+    'HTML':'HyperText Markup Language',
+    'HTTP':'HyperText Transfer Protocol',
+    'HTTPS':'HyperText Transfer Protocol Secure',
+    'URL':'Uniform Resource Locator',
+    'API':'Application Programming Interface',
+    'CPU':'Central Processing Unit',
+    'GPU':'Graphics Processing Unit',
+    'RAM':'Random Access Memory',
+    'ROM':'Read-Only Memory',
+    'SSD':'Solid-State Drive',
+    'HDD':'Hard Disk Drive',
+    'USB':'Universal Serial Bus',
+    'PDF':'Portable Document Format',
+    'WIFI':'Wireless Fidelity',
+    'GPS':'Global Positioning System',
+    'AI':'Artificial Intelligence',
+    'ML':'Machine Learning',
+    'UI':'User Interface',
+    'UX':'User Experience',
+    'SQL':'Structured Query Language',
+    'PHP':'PHP: Hypertext Preprocessor',
+    'GNU':'GNU\'s Not Unix',
+    'FBI':'Federal Bureau of Investigation',
+    'CIA':'Central Intelligence Agency',
+    'NATO':'North Atlantic Treaty Organization',
+    'UNICEF':'United Nations International Children\'s Emergency Fund',
+    'WHO':'World Health Organization',
+    'UN':'United Nations',
+    'EU':'European Union',
+    'USA':'United States of America',
+    'UK':'United Kingdom',
+    'CEO':'Chief Executive Officer',
+    'CFO':'Chief Financial Officer',
+    'COO':'Chief Operating Officer',
+    'HR':'Human Resources',
+    'PR':'Public Relations',
+    'ROI':'Return on Investment',
+    'B2B':'Business to Business',
+    'B2C':'Business to Consumer',
+    'KPI':'Key Performance Indicator',
+    'MVP':'Minimum Viable Product',
+    'DIY':'Do It Yourself',
+    'FYI':'For Your Information',
+    'TBD':'To Be Determined',
+    'ETA':'Estimated Time of Arrival',
+    'RSVP':'Répondez S\'il Vous Plaît (Please Reply)',
+    'PIN':'Personal Identification Number',
+    'ATM':'Automated Teller Machine',
+    'ISBN':'International Standard Book Number',
+    'STEM':'Science Technology Engineering Mathematics',
+    'PTSD':'Post-Traumatic Stress Disorder',
+    'HIV':'Human Immunodeficiency Virus',
+    'AIDS':'Acquired Immune Deficiency Syndrome',
+    'DNA':'Deoxyribonucleic Acid',
+    'RNA':'Ribonucleic Acid',
+    'MRI':'Magnetic Resonance Imaging',
+    'EMT':'Emergency Medical Technician',
+    'ER':'Emergency Room',
+    'ICU':'Intensive Care Unit',
+  };
+
+  document.getElementById('decoder-search').addEventListener('click', () => {
+    const q = document.getElementById('decoder-input').value.trim().toUpperCase();
+    const el = document.getElementById('decoder-result');
+    if (!q) return;
+    const result = ACRONYM_DB[q];
+    if (result) {
+      const letters = q.split('').map((l,i) => `<span style="color:var(--page-accent);font-weight:800">${l}</span>`).join('');
+      el.innerHTML = `
+        <div class="acronym-display">
+          <div class="acro-badge" style="margin-bottom:10px">Found!</div>
+          <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--page-accent);letter-spacing:.1em;margin-bottom:10px">${q}</div>
+          <div class="acro-result-text" style="font-size:1.2rem">${result}</div>
+          <div class="acro-copy-row" style="margin-top:14px">
+            <button class="btn-primary" onclick="navigator.clipboard?.writeText('${q}: ${result}');showCopyToast('Copied!')">Copy</button>
+          </div>
+        </div>
+      `;
+    } else {
+      el.innerHTML = `<div class="no-results"><span class="no-results-icon">🔡</span><p><strong>${q}</strong> is not in our database. Try the Backronym Builder to create your own meaning!</p></div>`;
+    }
+  });
+
+  // Famous acronyms grid
+  const famousData = [
+    {a:'NASA',f:'National Aeronautics & Space Administration',c:'Science'},
+    {a:'RADAR',f:'Radio Detection And Ranging',c:'Technology'},
+    {a:'SCUBA',f:'Self-Contained Underwater Breathing Apparatus',c:'Equipment'},
+    {a:'LASER',f:'Light Amplification by Stimulated Emission of Radiation',c:'Physics'},
+    {a:'ASAP',f:'As Soon As Possible',c:'Business'},
+    {a:'FAQ',f:'Frequently Asked Questions',c:'Technology'},
+    {a:'HTML',f:'HyperText Markup Language',c:'Web'},
+    {a:'API',f:'Application Programming Interface',c:'Software'},
+    {a:'GPS',f:'Global Positioning System',c:'Technology'},
+    {a:'WIFI',f:'Wireless Fidelity',c:'Networking'},
+    {a:'NATO',f:'North Atlantic Treaty Organization',c:'Military'},
+    {a:'UNICEF',f:'United Nations International Children\'s Emergency Fund',c:'Charity'},
+    {a:'CEO',f:'Chief Executive Officer',c:'Business'},
+    {a:'ROI',f:'Return on Investment',c:'Finance'},
+    {a:'STEM',f:'Science Technology Engineering Mathematics',c:'Education'},
+    {a:'DNA',f:'Deoxyribonucleic Acid',c:'Biology'},
+    {a:'RSVP',f:'Répondez S\'il Vous Plaît',c:'Etiquette'},
+    {a:'DIY',f:'Do It Yourself',c:'Lifestyle'},
+    {a:'PTSD',f:'Post-Traumatic Stress Disorder',c:'Medical'},
+    {a:'ISBN',f:'International Standard Book Number',c:'Publishing'},
+  ];
+
+  document.getElementById('famous-grid').innerHTML = famousData.map(d => `
+    <div class="famous-card">
+      <div class="famous-acronym">${d.a}</div>
+      <div class="famous-full">${d.f}</div>
+      <div class="famous-field">${d.c}</div>
+    </div>
+  `).join('');
+});
+</script>
+</body>
+</html>
