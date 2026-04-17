@@ -82,35 +82,6 @@ p  { font-size: 1rem; line-height: 1.75; color: var(--text-muted); }
 .animate-on-scroll { opacity:0; transform:translateY(24px); transition:opacity .55s ease,transform .55s ease; }
 .animate-on-scroll.visible { opacity:1; transform:none; }
 
-/* ── HEADER ───────────────────────────────── */
-#site-header {
-  position: fixed; top:0; left:0; right:0;
-  z-index: 1000; height: var(--header-h);
-  background: rgba(255,254,249,.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid transparent;
-  transition: border-color .3s, box-shadow .3s;
-}
-#site-header.scrolled { border-color: var(--border); box-shadow: var(--shadow-sm); }
-.header-inner {
-  max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
-  height: 100%; display: flex; align-items: center; gap: 32px;
-}
-.logo { display:flex; align-items:center; gap:10px; color:var(--text); flex-shrink:0; }
-.logo-text { font-family: var(--font-display); font-size:1.3rem; font-weight:600; color:var(--text); }
-.logo-text strong { color: var(--accent); font-weight:800; }
-.logo:hover { opacity:.85; color:var(--text); }
-.main-nav { margin-left: auto; }
-.main-nav ul { display:flex; align-items:center; gap:4px; }
-.main-nav a { color:var(--text-muted); font-size:.9rem; font-weight:500; padding:6px 12px; border-radius:var(--radius-sm); transition:background var(--transition),color var(--transition); }
-.main-nav a:hover { color:var(--accent); background:var(--accent-light); }
-.main-nav a.active { color:var(--accent); background:var(--accent-light); }
-.nav-toggle { display:none; flex-direction:column; gap:5px; padding:8px; margin-left:auto; }
-.nav-toggle span { display:block; width:24px; height:2px; background:var(--text); border-radius:2px; transition:transform .25s,opacity .25s; }
-.nav-toggle.active span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
-.nav-toggle.active span:nth-child(2){ opacity:0; }
-.nav-toggle.active span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
-
 /* ── BUTTONS ────────────────────────────── */
 .btn-primary {
   padding: 12px 24px; background: var(--accent); color: white;
