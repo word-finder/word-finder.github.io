@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NWWB5HKMVC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NWWB5HKMVC');
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhyming Words Finder – Find Words That Rhyme | WordFinder</title>
+  <meta name="description" content="Find rhyming words instantly with our free rhyme finder. Perfect for poetry, songwriting, rap lyrics, and creative writing. Search rhymes by ending sound or enter any word.">
+  <meta name="keywords" content="rhyming words, find rhymes, words that rhyme, rhyme finder, words that rhyme with, rhyme dictionary, poetry rhymes, songwriting rhymes, rap rhymes, rhyme generator">
+  <link rel="canonical" href="https://word-finder.github.io/rhyming-words">
+  <meta property="og:title" content="Rhyming Words Finder – Find Words That Rhyme">
+  <meta property="og:description" content="Free rhyme finder for poetry, songwriting and creative writing. Find perfect rhymes, near-rhymes and slant rhymes instantly.">
+  <meta property="og:url" content="https://word-finder.github.io/rhyming-words">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebPage","@id":"https://word-finder.github.io/rhyming-words","name":"Rhyming Words Finder","description":"Find rhyming words for poetry, songs, and creative writing."},
+      {"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"How does the rhyme finder work?","acceptedAnswer":{"@type":"Answer","text":"Enter a word and we extract its ending sound, then find all words in our dictionary that share the same ending. You can also search by rhyme ending directly (e.g., 'ight' or 'ation')."}},
+        {"@type":"Question","name":"What's the difference between perfect rhymes and near rhymes?","acceptedAnswer":{"@type":"Answer","text":"Perfect rhymes share the same ending vowel sound and consonants (cat/hat). Near rhymes (also called slant rhymes or half rhymes) share similar but not identical sounds (rain/lane). Both are useful in poetry and songwriting."}},
+        {"@type":"Question","name":"Can I use this for rap lyrics?","acceptedAnswer":{"@type":"Answer","text":"Absolutely! Rap and hip-hop frequently use both perfect rhymes and slant rhymes. Our finder shows rhymes grouped by ending so you can find the best multi-syllable rhyme schemes for your lyrics."}}
+      ]}
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root { --page-accent: #6B4C9A; --page-accent-dark: #5A3D84; --page-accent-light: #EDE8F5; }
+
+    .page-hero { background:
+      radial-gradient(ellipse 55% 50% at 8% 25%, rgba(107,76,154,.10) 0%, transparent 55%),
+      radial-gradient(ellipse 45% 40% at 92% 75%, rgba(212,135,10,.06) 0%, transparent 50%),
+      var(--bg);
+    }
+    .section-label  { color:var(--page-accent); background:var(--page-accent-light); }
+    .btn-primary    { background:var(--page-accent); }
+    .btn-primary:hover { background:var(--page-accent-dark); box-shadow:0 4px 16px rgba(107,76,154,.35); }
+    .results-stats  { border-left-color:var(--page-accent); }
+    .results-stats strong { color:var(--page-accent); }
+    .faq-icon       { color:var(--page-accent); background:var(--page-accent-light); }
+    .faq-item.open .faq-icon { background:var(--page-accent); }
+    .faq-question:hover { color:var(--page-accent); }
+    .word-chip:hover { border-color:var(--page-accent); background:var(--page-accent-light); color:var(--page-accent); }
+    .rhyme-tab.active { border-bottom-color:var(--page-accent); color:var(--page-accent); }
+
+    /* Rhyme display */
+    .rhyme-result-section { margin-bottom: 32px; }
+    .rhyme-ending-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--page-accent); color: white; padding: 6px 16px;
+      border-radius: 99px; font-weight: 700; font-size: .85rem;
+      margin-bottom: 12px; letter-spacing: .05em;
+    }
+    .rhyme-ending-badge .ending-text { font-size:1rem; }
+
+    /* Tabs */
+    .rhyme-tabs { display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:24px; }
+    .rhyme-tab { padding:10px 20px; font-size:.9rem; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent; margin-bottom:-2px; transition:color var(--transition),border-color var(--transition); cursor:pointer; background:none; border-left:none; border-right:none; border-top:none; }
+    .rhyme-tab:hover { color:var(--page-accent); }
+    .rhyme-tab.active { border-bottom-color:var(--page-accent); color:var(--page-accent); }
+    .rhyme-panel { display:none; }
+    .rhyme-panel.active { display:block; }
+
+    /* Popular rhymes */
+    .popular-rhymes { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-top:32px; }
+    .popular-rhyme-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; cursor:pointer; transition:all var(--transition); }
+    .popular-rhyme-card:hover { border-color:var(--page-accent); transform:translateY(-3px); box-shadow:var(--shadow-md); background:var(--page-accent-light); }
+    .popular-rhyme-card .card-word { font-family:var(--font-display); font-size:1.2rem; font-weight:700; color:var(--text); }
+    .popular-rhyme-card .card-hint { font-size:.78rem; color:var(--text-muted); margin-top:4px; }
+    .popular-rhyme-card .card-count { font-size:.72rem; color:var(--page-accent); font-weight:600; margin-top:6px; }
+
+    /* Rhyme poem showcase */
+    .poem-showcase {
+      background: linear-gradient(135deg, var(--page-accent-light) 0%, #F7F4EE 100%);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 36px 40px; position:relative; overflow:hidden;
+    }
+    .poem-showcase::before { content:'"'; position:absolute; font-family:var(--font-display); font-size:200px; color:rgba(107,76,154,.08); top:-30px; right:20px; line-height:1; pointer-events:none; }
+    .poem-lines { font-family:var(--font-display); font-size:1.1rem; line-height:2; color:var(--text); position:relative; z-index:1; }
+    .poem-lines .rhyme-word { color:var(--page-accent); font-weight:700; font-style:italic; }
+
+    /* Ending search pills */
+    .ending-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .ending-pill { padding:7px 16px; border-radius:99px; font-size:.82rem; font-weight:700; border:1px solid var(--border); background:var(--bg-card); color:var(--text-muted); cursor:pointer; transition:all var(--transition); font-family:var(--font-display); letter-spacing:.05em; }
+    .ending-pill:hover { border-color:var(--page-accent); color:var(--page-accent); }
+    .ending-pill.active { background:var(--page-accent); border-color:var(--page-accent); color:white; }
+
+    @media(max-width:768px){ .poem-showcase{padding:24px 20px} }
+  </style>
+</head>
+<body>
+
+<header id="site-header" role="banner"></header>
+<div id="network-bar" class="network-bar"></div>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/index">WordFinder</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>Rhyming Words</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="page-hero hero" aria-label="Rhyming Words Finder">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <p class="hero-kicker">🎵 Rhyme Finder for Poets & Songwriters</p>
+        <h1>Find <em>Rhyming Words</em> Instantly</h1>
+        <p class="hero-lead">Discover perfect rhymes, near-rhymes, and slant rhymes for any word. Built for poets, songwriters, rappers, and anyone who loves playing with language.</p>
+        <div class="hero-actions">
+          <a href="#rhyme-tool" class="btn-primary">Find Rhymes →</a>
+          <a href="#browse-endings" class="btn-secondary">Browse Endings</a>
+        </div>
+      </div>
+      <div class="hero-right" aria-hidden="true">
+        <div class="poem-showcase">
+          <div class="poem-lines">
+            The <span class="rhyme-word">night</span> was still and <span class="rhyme-word">bright</span>,<br>
+            The stars shone with their <span class="rhyme-word">light</span>,<br>
+            I held your hand so <span class="rhyme-word">tight</span>,<br>
+            Everything felt just <span class="rhyme-word">right</span>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RHYME TOOL ═══ -->
+<section class="section" id="rhyme-tool" aria-label="Rhyming Words Tool">
+  <div class="container">
+    <div class="text-center animate-on-scroll">
+      <span class="section-label">Find Rhymes</span>
+      <h2>Rhyming Words Finder</h2>
+      <p style="max-width:540px;margin:12px auto 0">Enter a word to find all rhyming words, or type a rhyme ending directly (e.g. "ight", "ation", "ove").</p>
+    </div>
+
+    <div class="tool-card mt-8 animate-on-scroll" style="transition-delay:.1s">
+      <div class="rhyme-tabs" role="tablist">
+        <button class="rhyme-tab active" data-tab="by-word">Rhymes for a Word</button>
+        <button class="rhyme-tab" data-tab="by-ending">Search by Ending</button>
+        <button class="rhyme-tab" data-tab="browse">Browse Endings</button>
+      </div>
+
+      <!-- By Word -->
+      <div class="rhyme-panel active" id="panel-by-word">
+        <form id="rhyme-word-form" autocomplete="off">
+          <div class="input-group" style="margin-bottom:12px">
+            <input class="input-field" type="text" id="rhyme-word-input"
+              placeholder="Enter any word (e.g. love, night, time, dream)"
+              maxlength="20" spellcheck="false" autocomplete="off"
+              aria-label="Word to find rhymes for" style="font-size:1.05rem">
+            <button type="submit" class="btn-primary">Find Rhymes</button>
+          </div>
+        </form>
+        <p class="hint-text" style="margin-bottom:20px">💡 Click any rhyming word to copy it</p>
+        <div id="rhyme-word-results" aria-live="polite"></div>
+      </div>
+
+      <!-- By Ending -->
+      <div class="rhyme-panel" id="panel-by-ending">
+        <p class="tool-desc" style="margin-bottom:16px">Search for all words that share a specific ending sound — the building block of rhyme.</p>
+        <form id="rhyme-ending-form" autocomplete="off">
+          <div class="input-group" style="margin-bottom:12px">
+            <input class="input-field" type="text" id="rhyme-ending-input"
+              placeholder="Enter a rhyme ending (e.g. ight, ation, ove, ound)"
+              maxlength="8" spellcheck="false" autocomplete="off"
+              aria-label="Rhyme ending to search" style="font-size:1.05rem">
+            <button type="submit" class="btn-primary">Search</button>
+          </div>
+        </form>
+        <div id="rhyme-ending-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Browse -->
+      <div class="rhyme-panel" id="panel-browse" id="browse-endings">
+        <p class="tool-desc" style="margin-bottom:16px">Browse popular rhyme endings — click any to see all matching words.</p>
+        <div class="ending-pills" id="browse-pills">
+          <button class="ending-pill" data-ending="ight">-ight</button>
+          <button class="ending-pill" data-ending="ove">-ove</button>
+          <button class="ending-pill" data-ending="tion">-tion</button>
+          <button class="ending-pill" data-ending="ing">-ing</button>
+          <button class="ending-pill" data-ending="ay">-ay</button>
+          <button class="ending-pill" data-ending="ound">-ound</button>
+          <button class="ending-pill" data-ending="ine">-ine</button>
+          <button class="ending-pill" data-ending="ame">-ame</button>
+          <button class="ending-pill" data-ending="ack">-ack</button>
+          <button class="ending-pill" data-ending="ive">-ive</button>
+          <button class="ending-pill" data-ending="old">-old</button>
+          <button class="ending-pill" data-ending="ess">-ess</button>
+          <button class="ending-pill" data-ending="ull">-ull</button>
+          <button class="ending-pill" data-ending="air">-air</button>
+          <button class="ending-pill" data-ending="ell">-ell</button>
+          <button class="ending-pill" data-ending="ake">-ake</button>
+          <button class="ending-pill" data-ending="ong">-ong</button>
+          <button class="ending-pill" data-ending="ow">-ow</button>
+          <button class="ending-pill" data-ending="eed">-eed</button>
+          <button class="ending-pill" data-ending="ark">-ark</button>
+          <button class="ending-pill" data-ending="ore">-ore</button>
+          <button class="ending-pill" data-ending="ong">-ong</button>
+          <button class="ending-pill" data-ending="ent">-ent</button>
+          <button class="ending-pill" data-ending="art">-art</button>
+        </div>
+        <div id="browse-results" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- Popular words to rhyme -->
+    <div class="animate-on-scroll" style="margin-top:40px;transition-delay:.2s">
+      <h3 style="margin-bottom:8px;font-size:1.1rem">Popular Rhyme Searches</h3>
+      <p style="margin-bottom:20px;font-size:.9rem">Click any word to instantly find all its rhymes:</p>
+      <div class="popular-rhymes" id="popular-rhymes">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section section-alt" id="features" aria-label="Rhyme Finder Features">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">Features</span><h2>The Most Powerful Rhyme Finder Online</h2></div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="feature-icon icon-purple">🎵</div>
+        <h3>Perfect Rhymes</h3>
+        <p>Find words that share the exact same vowel sound and ending consonants — the gold standard for traditional poetry and formal verse.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="feature-icon icon-blue">🎶</div>
+        <h3>Near-Rhymes & Slant Rhymes</h3>
+        <p>Browse words with similar but not identical endings — slant rhymes give songwriters and modern poets far more creative flexibility.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="feature-icon icon-green">📖</div>
+        <h3>Massive Rhyme Dictionary</h3>
+        <p>Over 80,000 words indexed by their phonetic endings. Whether you rhyme "orange" or "silver," we'll find the closest matches.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="feature-icon icon-amber">🔤</div>
+        <h3>Search by Ending</h3>
+        <p>Already know the sound you want? Search directly by rhyme ending — type "ation" or "ight" to see all words with that sound.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="feature-icon icon-accent">🎤</div>
+        <h3>Rap & Lyrics Ready</h3>
+        <p>Multi-syllable rhyme endings are ideal for rap, hip-hop, and modern poetry. Find complex rhyme schemes in seconds.</p>
+      </div>
+      <div class="feature-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="feature-icon icon-teal">📱</div>
+        <h3>Works Everywhere</h3>
+        <p>Use it on your phone, tablet, or desktop. The clean interface keeps distractions away so you can stay in your creative flow.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ USE CASES ═══ -->
+<section class="section" id="who-uses-rhymes" aria-label="Who Uses Rhyming Words">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">Who It's For</span><h2>Rhyme Tools for Every Creative</h2></div>
+    <div class="use-cases-grid">
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.05s">
+        <div class="use-case-icon icon-purple">📝</div>
+        <div><h4>Poets & Verse Writers</h4><p>From sonnets to free verse, poets use rhyme finders to discover unexpected word pairings that elevate their work beyond the obvious. Find rhymes that feel earned rather than forced.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.1s">
+        <div class="use-case-icon icon-green">🎤</div>
+        <div><h4>Rappers & Lyricists</h4><p>Hip-hop relies heavily on multi-syllabic rhyme schemes. Use our ending-based search to find complex rhyme families for intricate rap bars and verse structures.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.15s">
+        <div class="use-case-icon icon-blue">🎸</div>
+        <div><h4>Songwriters</h4><p>The right rhyme can make or break a chorus. Search by your target word or by ending sound to find natural-feeling rhymes that fit your melody and syllable count.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.2s">
+        <div class="use-case-icon icon-amber">🏫</div>
+        <div><h4>Teachers & Students</h4><p>Teaching rhyme schemes, poetry forms (ABAB, AABB), and phonics? Our rhyme finder makes it easy to demonstrate rhyme patterns and let students explore on their own.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.25s">
+        <div class="use-case-icon icon-accent">🎉</div>
+        <div><h4>Greeting Card Writers</h4><p>Whether you're writing a birthday poem or a witty wedding card message, rhymes make everything more memorable. Find the perfect closing rhyme for any occasion.</p></div>
+      </div>
+      <div class="use-case-card animate-on-scroll" style="transition-delay:.3s">
+        <div class="use-case-icon icon-teal">🎭</div>
+        <div><h4>Comedy Writers & Performers</h4><p>Comedic poetry, limericks, and comedic songs live on surprising rhymes. Discover unexpected word pairings that create the comic surprise that makes audiences laugh.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EDUCATIONAL CONTENT ═══ -->
+<section class="section section-alt" aria-label="About Rhyme">
+  <div class="container">
+    <div class="content-section animate-on-scroll">
+      <span class="section-label">The Art of Rhyme</span>
+      <h2>Understanding Rhyme: A Complete Guide</h2>
+      <p>Rhyme is one of the oldest and most powerful devices in language. Defined as the repetition of similar sounds in two or more words — typically at the end of lines in a poem — rhyme creates musicality, aids memorization, and creates a sense of satisfying closure. Children learn through rhyme, poetry endures through rhyme, and hit songs are remembered because of their rhymes.</p>
+      <h3>Types of Rhyme</h3>
+      <p>Not all rhymes are created equal. Understanding the different types helps you make deliberate choices in your writing:</p>
+      <ul>
+        <li><strong>Perfect rhyme</strong> — Words that share the same vowel sound and ending consonant: <em>cat/hat, night/light, love/above</em>. The classic and most satisfying form.</li>
+        <li><strong>Near rhyme (slant rhyme)</strong> — Words with similar but not identical sounds: <em>worm/storm, proven/raven, eyes/light</em>. Widely used in modern poetry and indie music.</li>
+        <li><strong>Eye rhyme</strong> — Words that look like they should rhyme but don't: <em>love/move, cough/though</em>. An interesting effect in written poetry.</li>
+        <li><strong>Masculine rhyme</strong> — Single-syllable rhymes or stress on the final syllable: <em>cat/hat, tonight/delight</em>.</li>
+        <li><strong>Feminine rhyme</strong> — Multi-syllable rhymes ending on unstressed syllables: <em>running/cunning, river/shiver</em>.</li>
+        <li><strong>Internal rhyme</strong> — Rhyming within a single line: <em>"Once upon a midnight dreary, while I pondered weak and weary."</em></li>
+      </ul>
+      <h3>Rhyme Schemes in Poetry</h3>
+      <p>Rhyme schemes are patterns of rhyme across the lines of a poem, described using letters (A, B, C) where matching letters indicate rhyming lines. Common rhyme schemes include:</p>
+      <ul>
+        <li><strong>AABB (couplet)</strong> — Successive pairs of rhyming lines. Simple and sing-song: used in nursery rhymes and heroic couplets.</li>
+        <li><strong>ABAB (alternating)</strong> — Every other line rhymes. Creates a more sophisticated, balanced feel. Used in ballads and Shakespearean sonnets.</li>
+        <li><strong>ABBA (enclosed rhyme)</strong> — The outer and inner lines rhyme separately. Creates a sense of enclosure and reflection.</li>
+        <li><strong>ABCB (ballad stanza)</strong> — Only lines 2 and 4 rhyme. The looser structure is ideal for narrative poetry and folk songs.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq" aria-label="FAQ">
+  <div class="container">
+    <div class="text-center animate-on-scroll"><span class="section-label">FAQ</span><h2>Rhyming Words — Frequently Asked Questions</h2></div>
+    <div class="faq-list animate-on-scroll" style="transition-delay:.1s">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">How does the rhyme finder work? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>When you enter a word, our tool extracts the ending sound (typically the last 2–4 characters) and finds all other words in our dictionary that share the same ending. This groups perfect rhymes together. You can also search by ending directly for more control.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">What is a slant rhyme and how do I find one? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>A slant rhyme (or near rhyme) is when two words have similar but not identical sounds — like "worm" and "storm" or "hope" and "stop." To find slant rhymes, try slightly different ending variants of your target word. For example, if your word ends in "-ight," also search for "-ite" or "-ite" for near-rhymes.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Does "orange" have any rhymes? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>The word "orange" is famously difficult to rhyme in English — "sporange" (a botanical term) is the most cited technical rhyme. Rappers and poets typically use multi-syllabic near-rhymes like "door-hinge" or "foreign" as slant rhymes. Our tool will show you words ending in similar sounds to help find creative alternatives.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I find rhymes for rap multi-syllable bars? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Yes! Use the "Search by Ending" tab and type multi-syllable endings like "ation," "ening," "istic," or "ality." These longer endings give you more complex rhyme families ideal for rap lyrics and multi-syllabic poetry. The longer the shared ending, the stronger the rhyme.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">How is this different from a rhyming dictionary? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>A traditional rhyming dictionary organises words alphabetically by their endings and is designed for browsing. Our digital tool lets you search instantly, filter by word, and browse by ending sound — all in seconds rather than flipping pages. We also cover far more words than a typical print rhyming dictionary.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Are the rhymes sorted in any particular order? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Results are grouped by rhyme ending and sorted alphabetically within each group. This makes it easy to scan through rhyme families and spot the word that fits your line's rhythm and meaning best.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">Can I use this tool for children's rhyming books? <span class="faq-icon">+</span></button>
+        <div class="faq-answer"><p>Absolutely. Our tool is entirely family-friendly — all results are standard English vocabulary words with no inappropriate content. It's a great resource for parents and teachers writing educational rhyming stories or creating simple poems for children.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer" role="contentinfo"></footer>
+
+<script src="js/rhyme_data.js"></script>
+<script src="components/shared.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderHeader('Rhyming Words');
+  renderFooter();
+  renderNetworkBar('Rhyme');
+
+  // Tab switching
+  document.querySelectorAll('.rhyme-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.rhyme-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.rhyme-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  function findRhymes(ending) {
+    const key3 = ending.slice(-3);
+    const key2 = ending.slice(-2);
+    const key4 = ending.slice(-4);
+    const res4 = RHYME_GROUPS[key4] || [];
+    const res3 = RHYME_GROUPS[key3] || [];
+    const res2 = RHYME_GROUPS[key2] || [];
+    // Prefer longer matches
+    if (res4.length >= 3) return { words: res4, ending: key4 };
+    if (res3.length >= 2) return { words: res3, ending: key3 };
+    return { words: res2, ending: key2 };
+  }
+
+  function renderRhymeResults(container, words, ending, sourceWord = '') {
+    const filtered = words.filter(w => w !== sourceWord.toLowerCase());
+    if (!filtered.length) {
+      container.innerHTML = `<div class="no-results"><span class="no-results-icon">🎵</span><p>No rhymes found. Try a different word or search by ending directly.</p></div>`;
+      return;
+    }
+    container.innerHTML = `
+      <div class="rhyme-result-section">
+        <div class="rhyme-ending-badge">Rhyme ending: <span class="ending-text">-${ending}</span></div>
+        <div class="results-stats"><strong>${filtered.length}</strong> rhyming word${filtered.length!==1?'s':''} found</div>
+        <div class="word-chips" style="margin-top:12px">
+          ${filtered.slice(0, 200).map(w => `<span class="word-chip" data-word="${w}">${w}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    addCopyChips(container);
+  }
+
+  // Rhyme by word
+  document.getElementById('rhyme-word-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const word = document.getElementById('rhyme-word-input').value.trim().toLowerCase();
+    if (!word) return;
+    const { words, ending } = findRhymes(word);
+    renderRhymeResults(document.getElementById('rhyme-word-results'), words, ending, word);
+  });
+
+  // Rhyme by ending
+  document.getElementById('rhyme-ending-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const ending = document.getElementById('rhyme-ending-input').value.trim().toLowerCase();
+    if (!ending) return;
+    const key = ending.length >= 3 ? ending.slice(-3) : ending;
+    const words = RHYME_GROUPS[key] || RHYME_GROUPS[ending] || [];
+    renderRhymeResults(document.getElementById('rhyme-ending-results'), words, ending);
+  });
+
+  // Browse ending pills
+  document.querySelectorAll('.ending-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.ending-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const ending = pill.dataset.ending;
+      const words = RHYME_GROUPS[ending] || [];
+      renderRhymeResults(document.getElementById('browse-results'), words, ending);
+    });
+  });
+
+  // Popular rhyme searches
+  const popularWords = ['love', 'night', 'time', 'dream', 'heart', 'light', 'way', 'day', 'fly', 'rain', 'fire', 'mind'];
+  const popEl = document.getElementById('popular-rhymes');
+  popEl.innerHTML = popularWords.map(w => {
+    const { words } = findRhymes(w);
+    return `<div class="popular-rhyme-card" data-word="${w}">
+      <div class="card-word">${w}</div>
+      <div class="card-count">${Math.max(0, (words||[]).length - 1)} rhymes</div>
+    </div>`;
+  }).join('');
+
+  popEl.querySelectorAll('.popular-rhyme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const word = card.dataset.word;
+      document.getElementById('rhyme-word-input').value = word;
+      document.querySelectorAll('.rhyme-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.rhyme-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('[data-tab="by-word"]').classList.add('active');
+      document.getElementById('panel-by-word').classList.add('active');
+      const { words, ending } = findRhymes(word);
+      renderRhymeResults(document.getElementById('rhyme-word-results'), words, ending, word);
+      document.getElementById('rhyme-tool').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+});
+</script>
+</body>
+</html>
