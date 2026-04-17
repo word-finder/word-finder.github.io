@@ -22,16 +22,82 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@graph":[
-      {"@type":"WebPage","@id":"https://word-finder.github.io/random-word-generator","name":"Random Word Generator","description":"Generate random English words by length and count for games, writing, and education."},
-      {"@type":"FAQPage","mainEntity":[
-        {"@type":"Question","name":"What is a random word generator?","acceptedAnswer":{"@type":"Answer","text":"A random word generator is a tool that selects words at random from a dictionary. It's used for creative writing prompts, educational games, brainstorming, party games, and many other purposes."}},
-        {"@type":"Question","name":"Can I generate words of a specific length?","acceptedAnswer":{"@type":"Answer","text":"Yes! You can filter random words by exact length (3–12 letters), by starting letter, and choose how many words to generate at once (1–50 words)."}},
-        {"@type":"Question","name":"How are the random words selected?","acceptedAnswer":{"@type":"Answer","text":"Words are randomly selected from our dictionary of 80,000+ English words using a cryptographically-random selection algorithm to ensure true randomness."}}
-      ]}
-    ]
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://word-finder.github.io/random-word-generator#webapp",
+      "name": "Random Word Generator",
+      "description": "A versatile tool for generating random words by category, length, and starting or ending letters. Ideal for creative writing, games, and vocabulary building.",
+      "url": "https://word-finder.github.io/random-word-generator",
+      "applicationCategory": "EducationalApplication, GameApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript for client-side word generation and filtering.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Generate words by specific categories (Nouns, Verbs, Adjectives)",
+        "Filter by word length (Short, Medium, Long)",
+        "Advanced filters for 'Starts With' and 'Ends With' letters",
+        "Bulk generation mode",
+        "One-click copy to clipboard functionality"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "WordFinder"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://word-finder.github.io/random-word-generator",
+      "name": "Random Word Generator – Quick Word Discovery | WordFinder",
+      "description": "Generate random words instantly with our free online tool. Perfect for Pictionary, creative writing prompts, or improving your English vocabulary.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "WordFinder",
+            "item": "https://word-finder.github.io/index"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Random Word Generator"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@id": "https://word-finder.github.io/random-word-generator#webapp"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What can I use a random word generator for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is great for creative writing prompts, brainstorming for brainstorming, playing games like Pictionary or Charades, and expanding your vocabulary."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I filter the generated words?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can filter results by word type (noun, verb, adjective), word length, and specific starting or ending characters."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
   <link rel="stylesheet" href="css/shared.css">
   <style>
