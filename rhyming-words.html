@@ -22,16 +22,82 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@graph":[
-      {"@type":"WebPage","@id":"https://word-finder.github.io/rhyming-words","name":"Rhyming Words Finder","description":"Find rhyming words for poetry, songs, and creative writing."},
-      {"@type":"FAQPage","mainEntity":[
-        {"@type":"Question","name":"How does the rhyme finder work?","acceptedAnswer":{"@type":"Answer","text":"Enter a word and we extract its ending sound, then find all words in our dictionary that share the same ending. You can also search by rhyme ending directly (e.g., 'ight' or 'ation')."}},
-        {"@type":"Question","name":"What's the difference between perfect rhymes and near rhymes?","acceptedAnswer":{"@type":"Answer","text":"Perfect rhymes share the same ending vowel sound and consonants (cat/hat). Near rhymes (also called slant rhymes or half rhymes) share similar but not identical sounds (rain/lane). Both are useful in poetry and songwriting."}},
-        {"@type":"Question","name":"Can I use this for rap lyrics?","acceptedAnswer":{"@type":"Answer","text":"Absolutely! Rap and hip-hop frequently use both perfect rhymes and slant rhymes. Our finder shows rhymes grouped by ending so you can find the best multi-syllable rhyme schemes for your lyrics."}}
-      ]}
-    ]
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://word-finder.github.io/rhyming-words#webapp",
+      "name": "Rhyming Words Finder",
+      "description": "An interactive tool to find perfect and near rhymes for any word. Perfect for poets, songwriters, and creative writers looking for linguistic inspiration.",
+      "url": "https://word-finder.github.io/rhyming-words",
+      "applicationCategory": "EducationalApplication, MultimediaApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript for dynamic rhyme generation and syllable filtering.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Instant rhyme generation for any English word",
+        "Filter results by syllable count",
+        "Advanced search by word type (Nouns, Verbs, Adjectives)",
+        "Near-rhyme and slant-rhyme suggestions",
+        "One-click copy for found words"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "WordFinder"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://word-finder.github.io/rhyming-words",
+      "name": "Rhyming Words – Find Perfect Rhymes & Near Rhymes | WordFinder",
+      "description": "Free online rhyming dictionary. Enter a word to find a list of rhyming words organized by syllables. Ideal for songwriting, poetry, and creative play.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "WordFinder",
+            "item": "https://word-finder.github.io/index"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Rhyming Words"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@id": "https://word-finder.github.io/rhyming-words#webapp"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the rhyming words finder work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply enter your target word into the search bar. The tool analyzes the phonetic ending and provides a categorized list of words that rhyme, sorted by the number of syllables."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I find rhymes for songwriting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, this tool is specifically designed for songwriters and poets to find both perfect rhymes and near rhymes to fit various meters and rhythms."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
   <link rel="stylesheet" href="css/shared.css">
   <style>
