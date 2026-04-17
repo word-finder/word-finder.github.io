@@ -15,24 +15,90 @@
   <title>Crossword Solver – Find Words by Pattern | WordFinder</title>
   <meta name="description" content="Free crossword solver and helper. Enter your crossword pattern with blank letters (using ? or _) to instantly find all matching words. Works for any crossword puzzle.">
   <meta name="keywords" content="crossword solver, crossword helper, crossword puzzle solver, find crossword words, crossword clue solver, pattern word finder, fill in the blank word finder">
-  <link rel="canonical" href="https://word-finder.github.io/crossword-solver.html">
+  <link rel="canonical" href="https://word-finder.github.io/crossword-solver">
   <meta property="og:title" content="Crossword Solver – Find Words by Pattern">
   <meta property="og:description" content="Instantly solve crossword clues by entering your letter pattern. Free, fast, and no registration required.">
-  <meta property="og:url" content="https://word-finder.github.io/crossword-solver.html">
+  <meta property="og:url" content="https://word-finder.github.io/crossword-solver">
   <meta property="og:type" content="website">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@graph":[
-      {"@type":"WebPage","@id":"https://word-finder.github.io/crossword-solver.html","name":"Crossword Solver","description":"Free crossword solver. Find crossword words by pattern with blank letter slots.","isPartOf":{"@id":"https://word-finder.github.io/#website"}},
-      {"@type":"FAQPage","mainEntity":[
-        {"@type":"Question","name":"How do I use the crossword solver?","acceptedAnswer":{"@type":"Answer","text":"Enter your crossword pattern using known letters and ? or _ for unknown letters. For example, 'c_t' will find 'cat', 'cut', 'cot'. You can also specify the word length and any letters the word must contain."}},
-        {"@type":"Question","name":"What symbols can I use for blank squares?","acceptedAnswer":{"@type":"Answer","text":"Use ? or _ (underscore) for any unknown letter. For example, ?ight finds 'fight', 'light', 'night', 'right', 'sight', 'tight'. Both symbols work identically."}},
-        {"@type":"Question","name":"Can I solve multi-word crossword clues?","acceptedAnswer":{"@type":"Answer","text":"Our tool finds single words matching your pattern. For multi-word answers, solve each word separately using the pattern for each."}}
-      ]}
-    ]
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://word-finder.github.io/crossword-solver#webapp",
+      "name": "Crossword Solver & Word Finder",
+      "description": "An advanced tool to solve crossword puzzles by entering known letters and word patterns. Supports wildcard searches and length-based filtering.",
+      "url": "https://word-finder.github.io/crossword-solver",
+      "applicationCategory": "EducationalApplication, GameApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript for real-time word pattern matching and dictionary filtering.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Pattern-based word searching (e.g., C..SSW...)",
+        "Wildcard support for unknown letters",
+        "Length-specific word filtering",
+        "One-click copy for found words",
+        "Integrated dictionary for crossword clues"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "WordFinder"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://word-finder.github.io/crossword-solver",
+      "name": "Crossword Solver – Find Missing Letters & Solve Puzzles | WordFinder",
+      "description": "Free online crossword solver. Enter the letters you know and the pattern of the word you're looking for to find all possible matches instantly.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "WordFinder",
+            "item": "https://word-finder.github.io/index"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Crossword Solver"
+          }
+        ]
+      },
+      "mainEntity": {
+        "@id": "https://word-finder.github.io/crossword-solver#webapp"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I use the crossword solver?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply enter the letters you already have and use dots (.) or question marks (?) for the missing letters. For example, 'h.lp' will find 'help'."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this tool support specific word lengths?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can filter results by word length to match the specific number of boxes in your crossword puzzle."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
   <link rel="stylesheet" href="css/shared.css">
   <style>
@@ -129,7 +195,7 @@
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <div class="container">
     <div class="breadcrumb-inner">
-      <a href="/index.html">WordFinder</a>
+      <a href="/index">WordFinder</a>
       <span class="breadcrumb-sep">›</span>
       <span>Crossword Solver</span>
     </div>
@@ -395,7 +461,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false">Can I use this for Scrabble or Wordle too? <span class="faq-icon">+</span></button>
-        <div class="faq-answer"><p>Absolutely! The pattern matcher is incredibly versatile. For Wordle, enter your 5-letter pattern with known letters and blanks. For Scrabble, it helps verify whether a specific word exists or find words to fit a particular board position. Visit our main <a href="/index.html">Word Finder</a> for full Scrabble-optimised tools.</p></div>
+        <div class="faq-answer"><p>Absolutely! The pattern matcher is incredibly versatile. For Wordle, enter your 5-letter pattern with known letters and blanks. For Scrabble, it helps verify whether a specific word exists or find words to fit a particular board position. Visit our main <a href="/index">Word Finder</a> for full Scrabble-optimised tools.</p></div>
       </div>
     </div>
   </div>
