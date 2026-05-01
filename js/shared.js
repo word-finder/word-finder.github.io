@@ -75,28 +75,29 @@ function renderFooter() {
             <li><a href="/acronym-generator">Acronym Generator</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Games</h4>
+       <div class="footer-col">
+          <h4>Pages</h4>
           <ul>
-            <li><a href="/">Scrabble Helper</a></li>
-            <li><a href="/">Wordle Solver</a></li>
-            <li><a href="/">Words With Friends</a></li>
-            <li><a href="/crossword-solver">Crossword Helper</a></li>
+            <li><a href="about">About</a></li>
+            <li><a href="contact">Contact</a></li>
+            <li><a href="privacy-policy">Privacy Policy</a></li>
+            <li><a href="terms-of-use">Terms of Use</a></li>
           </ul>
         </div>
-        <div class="footer-col">
+       <div class="footer-col">
           <h4>Learn</h4>
           <ul>
             <li><a href="/#how-it-works">How It Works</a></li>
             <li><a href="/#word-tips">Tips & Tricks</a></li>
             <li><a href="/#faq">FAQ</a></li>
+            <li><a href="/#word-of-the-day">Word of the Day</a></li>
           </ul>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
       <p>&copy; ${new Date().getFullYear()} WordFinder &mdash; <a href="https://word-finder.github.io">word-finder.github.io</a>. All rights reserved.</p>
-      <p>Free educational word tools for games and learning.</p>
+      <p class="footer-disclaimer">WordFinder is an educational tool for word games and vocabulary building. Not affiliated with any specific game publisher.</p>
     </div>
   `;
 }
