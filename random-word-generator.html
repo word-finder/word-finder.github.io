@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getPool() {
     const lenVal    = document.getElementById('word-length').value;
-    const startLet  = document.getElementById('start-letter').value;
+    const startLetter = document.getElementById('start-letter').value.toUpperCase();
     const minLen    = parseInt(document.getElementById('min-len-range').value);
     let pool;
 
