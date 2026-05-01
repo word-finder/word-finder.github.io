@@ -9,6 +9,7 @@ function renderHeader(activePage) {
     { href: '/random-word-generator', label: 'Random Words' },
     { href: '/rhyming-words',   label: 'Rhyming Words' },
     { href: '/acronym-generator', label: 'Acronym Generator' },
+    { href: '/about', label: 'About Us' },
   ];
 
   header.innerHTML = `
