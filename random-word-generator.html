@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getAllWords() {
     const allWords = [];
-    Object.values(RANDOM_WORDS).forEach(arr => allWords.push(...arr));
+    Object.values(WORDLIST).forEach(arr => allWords.push(...arr));
     return allWords;
   }
 
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lenVal === 'any') {
       pool = getAllWords();
     } else {
-      pool = RANDOM_WORDS[lenVal] || [];
+      pool = WORDLIST[lenVal] || [];
     }
 
     if (lenVal === 'any') pool = pool.filter(w => w.length >= minLen);
