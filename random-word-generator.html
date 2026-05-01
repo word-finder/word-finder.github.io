@@ -442,7 +442,7 @@
 </section>
 
 <footer id="site-footer" role="contentinfo"></footer>
-<script src="js/wordlist.js"></script>
+<script src="js/random_words.js"></script>
 <script src="components/shared.js"></script>
  
 <script>
@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getAllWords() {
     const allWords = [];
-    Object.values(WORDLIST).forEach(arr => allWords.push(...arr));
+    Object.values(RANDOM_WORDS).forEach(arr => allWords.push(...arr));
     return allWords;
   }
 
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lenVal === 'any') {
       pool = getAllWords();
     } else {
-      pool = WORDLIST[lenVal] || [];
+      pool = RANDOM_WORDS[lenVal] || [];
     }
 
     if (lenVal === 'any') pool = pool.filter(w => w.length >= minLen);
