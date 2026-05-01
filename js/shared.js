@@ -55,7 +55,7 @@ function renderFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="/index" class="logo footer-logo" aria-label="WordFinder Home">
+        <a href="/" class="logo footer-logo" aria-label="WordFinder Home">
           <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="36" height="36" rx="10" fill="var(--accent)"/>
             <text x="18" y="25" text-anchor="middle" font-family="serif" font-size="20" font-weight="700" fill="white">W</text>
