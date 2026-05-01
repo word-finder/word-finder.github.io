@@ -4,16 +4,16 @@ function renderHeader(activePage) {
   if (!header) return;
 
   const pages = [
-    { href: '/index.html',          label: 'Word Finder' },
-    { href: '/crossword-solver.html', label: 'Crossword Solver' },
-    { href: '/random-word-generator.html', label: 'Random Words' },
-    { href: '/rhyming-words.html',   label: 'Rhyming Words' },
-    { href: '/acronym-generator.html', label: 'Acronym Generator' },
+    { href: '/',          label: 'Word Finder' },
+    { href: '/crossword-solver', label: 'Crossword Solver' },
+    { href: '/random-word-generator', label: 'Random Words' },
+    { href: '/rhyming-words',   label: 'Rhyming Words' },
+    { href: '/acronym-generator', label: 'Acronym Generator' },
   ];
 
   header.innerHTML = `
     <div class="header-inner">
-      <a href="/index.html" class="logo" aria-label="WordFinder Home">
+      <a href="/" class="logo" aria-label="WordFinder Home">
         <span class="logo-icon">
           <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="36" height="36" rx="10" fill="var(--accent)"/>
@@ -55,7 +55,7 @@ function renderFooter() {
   footer.innerHTML = `
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="/index.html" class="logo footer-logo" aria-label="WordFinder Home">
+        <a href="/index" class="logo footer-logo" aria-label="WordFinder Home">
           <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="36" height="36" rx="10" fill="var(--accent)"/>
             <text x="18" y="25" text-anchor="middle" font-family="serif" font-size="20" font-weight="700" fill="white">W</text>
@@ -68,28 +68,28 @@ function renderFooter() {
         <div class="footer-col">
           <h4>Tools</h4>
           <ul>
-            <li><a href="/index.html">Word Finder</a></li>
-            <li><a href="/crossword-solver.html">Crossword Solver</a></li>
-            <li><a href="/random-word-generator.html">Random Word Generator</a></li>
-            <li><a href="/rhyming-words.html">Rhyming Words</a></li>
-            <li><a href="/acronym-generator.html">Acronym Generator</a></li>
+            <li><a href="/">Word Finder</a></li>
+            <li><a href="/crossword-solver">Crossword Solver</a></li>
+            <li><a href="/random-word-generator">Random Word Generator</a></li>
+            <li><a href="/rhyming-words">Rhyming Words</a></li>
+            <li><a href="/acronym-generator">Acronym Generator</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Games</h4>
           <ul>
-            <li><a href="/index.html">Scrabble Helper</a></li>
-            <li><a href="/index.html">Wordle Solver</a></li>
-            <li><a href="/index.html">Words With Friends</a></li>
-            <li><a href="/crossword-solver.html">Crossword Helper</a></li>
+            <li><a href="/">Scrabble Helper</a></li>
+            <li><a href="/">Wordle Solver</a></li>
+            <li><a href="/">Words With Friends</a></li>
+            <li><a href="/crossword-solver">Crossword Helper</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Learn</h4>
           <ul>
-            <li><a href="/index.html#how-it-works">How It Works</a></li>
-            <li><a href="/index.html#word-tips">Tips & Tricks</a></li>
-            <li><a href="/index.html#faq">FAQ</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="/#word-tips">Tips & Tricks</a></li>
+            <li><a href="/#faq">FAQ</a></li>
           </ul>
         </div>
       </div>
@@ -106,11 +106,11 @@ function renderNetworkBar(currentLabel) {
   const bar = document.getElementById('network-bar');
   if (!bar) return;
   const tools = [
-    { href: '/index.html',                label: '🔤 Word Finder' },
-    { href: '/crossword-solver.html',      label: '✏️ Crossword Solver' },
-    { href: '/random-word-generator.html', label: '🎲 Random Words' },
-    { href: '/rhyming-words.html',         label: '🎵 Rhyming Words' },
-    { href: '/acronym-generator.html',     label: '🔡 Acronym Generator' },
+    { href: '/',                label: '🔤 Word Finder' },
+    { href: '/crossword-solver',      label: '✏️ Crossword Solver' },
+    { href: '/random-word-generator', label: '🎲 Random Words' },
+    { href: '/rhyming-words',         label: '🎵 Rhyming Words' },
+    { href: '/acronym-generator',     label: '🔡 Acronym Generator' },
   ];
   bar.innerHTML = `
     <div class="container">
