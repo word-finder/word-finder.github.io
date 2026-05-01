@@ -19,10 +19,10 @@ function renderFooter() {
         <div class="footer-col">
           <h4>Tools</h4>
           <ul>
-            <li><a href="#finder-tool">Word Finder</a></li>
-            <li><a href="#unscramble">Word Unscrambler</a></li>
-            <li><a href="#word-length">Words by Length</a></li>
-            <li><a href="#starts-ends">Starts / Ends With</a></li>
+            <li><a href="/#finder-tool">Word Finder</a></li>
+            <li><a href="/#unscramble">Word Unscrambler</a></li>
+            <li><a href="/#word-length">Words by Length</a></li>
+            <li><a href="/#starts-ends">Starts / Ends With</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -37,10 +37,10 @@ function renderFooter() {
         <div class="footer-col">
           <h4>Learn</h4>
           <ul>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#word-tips">Tips & Tricks</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#word-of-the-day">Word of the Day</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="/#word-tips">Tips & Tricks</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+            <li><a href="/#word-of-the-day">Word of the Day</a></li>
           </ul>
         </div>
       </div>
