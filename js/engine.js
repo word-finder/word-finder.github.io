@@ -6,21 +6,44 @@ const WordEngine = (() => {
   let wordsByLength = {};
 
   function init() {
-    if (!window.WORD_LIST) return;
+    if (!window.WORD_LIST || !Array.isArray(window.WORD_LIST)) {
+      console.error('WORD_LIST not available. Make sure wordlist.js is loaded.');
+      return false;
+    }
+    
+    // Clear existing data
     wordSet = new Set(WORD_LIST);
+    wordsByLength = {};
+    
+    // Build words by length index
     WORD_LIST.forEach(w => {
       const len = w.length;
-      if (!wordsByLength[len]) wordsByLength[len] = [];
+      if (!wordsByLength[len]) {
+        wordsByLength[len] = [];
+      }
       wordsByLength[len].push(w);
     });
+    
+    console.log('WordEngine initialized successfully');
+    console.log('Words by length keys:', Object.keys(wordsByLength));
+    return true;
   }
 
   function isValid(word) {
-    return wordSet && wordSet.has(word.toLowerCase());
+    if (!wordSet) {
+      console.error('WordEngine not initialized. Call init() first.');
+      return false;
+    }
+    return wordSet.has(word.toLowerCase());
   }
 
   // Find all words that can be formed from given letters (anagram/subset)
   function findFromLetters(letters, options = {}) {
+    if (!wordSet) {
+      console.error('WordEngine not initialized');
+      return [];
+    }
+    
     const { minLen = 2, maxLen = letters.length, mustInclude = '', exact = false } = options;
     const input = letters.toLowerCase().replace(/[^a-z?*]/g, '');
     const results = [];
@@ -58,12 +81,13 @@ const WordEngine = (() => {
 
   // Unscramble: words using ALL given letters
   function unscramble(letters) {
+    if (!wordSet) return [];
+    
     const input = letters.toLowerCase().replace(/[^a-z]/g, '');
     const sorted = input.split('').sort().join('');
     return WORD_LIST.filter(w => {
       if (w.length > input.length) return false;
-      return w.split('').sort().join('') === w.split('').sort().join('') &&
-        canFormWord(w, input);
+      return canFormWord(w, input);
     }).sort((a, b) => b.length - a.length);
   }
 
@@ -77,13 +101,19 @@ const WordEngine = (() => {
     return true;
   }
 
-  // Words by length
+  // Words by length - FIXED VERSION
   function byLength(len) {
-    return wordsByLength[len] || [];
+    // Convert to number to ensure proper lookup
+    const numLen = parseInt(len);
+    console.log('byLength called with:', numLen, 'Available keys:', Object.keys(wordsByLength));
+    const result = wordsByLength[numLen] || [];
+    console.log(`Found ${result.length} words of length ${numLen}`);
+    return result;
   }
 
   // Words starting with prefix
   function startsWith(prefix, maxResults = 200) {
+    if (!wordSet) return [];
     const p = prefix.toLowerCase();
     return WORD_LIST.filter(w => w.startsWith(p)).slice(0, maxResults)
       .sort((a, b) => a.length - b.length || a.localeCompare(b));
@@ -91,6 +121,7 @@ const WordEngine = (() => {
 
   // Words ending with suffix
   function endsWith(suffix, maxResults = 200) {
+    if (!wordSet) return [];
     const s = suffix.toLowerCase();
     return WORD_LIST.filter(w => w.endsWith(s)).slice(0, maxResults)
       .sort((a, b) => a.length - b.length || a.localeCompare(b));
@@ -98,6 +129,7 @@ const WordEngine = (() => {
 
   // Words matching a pattern: e.g., "c_t" or "?at"
   function matchPattern(pattern) {
+    if (!wordSet) return [];
     const p = pattern.toLowerCase();
     const regex = new RegExp('^' + p.replace(/[?_]/g, '.') + '$');
     return WORD_LIST.filter(w => regex.test(w))
@@ -136,5 +168,23 @@ const WordEngine = (() => {
       .sort((a, b) => b.score - a.score || b.length - a.length);
   }
 
-  return { init, isValid, findFromLetters, unscramble, byLength, startsWith, endsWith, matchPattern, wordOfTheDay, scrabbleScore, withScores };
+  return { 
+    init, 
+    isValid, 
+    findFromLetters, 
+    unscramble, 
+    byLength, 
+    startsWith, 
+    endsWith, 
+    matchPattern, 
+    wordOfTheDay, 
+    scrabbleScore, 
+    withScores 
+  };
 })();
+
+// Auto-initialize if WORD_LIST is already available
+if (window.WORD_LIST && Array.isArray(window.WORD_LIST) && window.WORD_LIST.length > 0) {
+  console.log('Auto-initializing WordEngine');
+  WordEngine.init();
+}
