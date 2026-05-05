@@ -1,22 +1,9 @@
 // Main App Controller
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Init engine after wordlist loads - with retry
-  function initEngine() {
-    if (window.WORD_LIST && window.WORD_LIST.length) {
-      WordEngine.init();
-      // Once initialized, set up everything that depends on the engine
-      setupApp();
-    } else {
-      // Retry after a short delay if wordlist hasn't loaded yet
-      setTimeout(initEngine, 100);
-    }
-  }
-  
-  initEngine();
-});
+  // Init engine after wordlist loads
+  if (window.WORD_LIST) WordEngine.init();
 
-function setupApp() {
   // ─── Word of the Day ───────────────────────────────────────────────────────
   function renderWOTD() {
     const el = document.getElementById('wotd-word');
